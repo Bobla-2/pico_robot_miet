@@ -36,16 +36,17 @@ motor_dc_pwm_6612_t  motor_robot_6612 = {
 };
 
 enkoder_t enkoder_L = {
-    .gpio = 23,
+    .gpio = 19,
 };
 enkoder_t enkoder_R = {
-    .gpio = 22,
+    .gpio = 18,
 };
 
 void main_init(){
     stdio_init_all();
     sensor_init(&state_sensor);
-
+    enkoder_init(&enkoder_L, &enkoder_R);
+    
     // motor_robot_init(&motor_robot);
     motor_6612_robot_init(&motor_robot_6612);
     // motor_init(&motor_dc_L);
@@ -67,11 +68,12 @@ int main() {
         // static char temp_str[128];
         time_stamp = time_us_32(); //  125.000 ≈ 1mc
         if  (time_stamp - time_old_stamp > 5000){
+            
             // if  (temp == 1){
                 // temp = 0;
                 gpio_put(PICO_DEFAULT_LED_PIN, true);
                 // motor_6612_robot_forward_turn_encoder(&motor_robot_6612, &enkoder_R, &enkoder_L, 90, 40);
-                motor_6612_robot_forward_encoder(&motor_robot_6612, &enkoder_R, &enkoder_L, 200, 30);
+                motor_6612_robot_forward_encoder(&motor_robot_6612, &enkoder_R, &enkoder_L, 200, 80);
                 
                 printf("R:%d, L:%d||| LmK:%d, RmK:%d \r\n ", enkoder_R.count, enkoder_L.count, motor_robot_6612.k_L, motor_robot_6612.k_R);
                 // motor_6612_robot_forward(&motor_robot_6612, 30);

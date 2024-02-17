@@ -7,9 +7,10 @@ typedef struct {
     uint gpio;
     bool state;
     int count;
+    
 } enkoder_t;
 
-void enkoder_init(enkoder_t* enkoder);
-void enkoder_read(enkoder_t* enkoder);
+void enkoder_init(enkoder_t* enkoder_L, enkoder_t* enkoder_R);
+// void enkoder_read(enkoder_t* enkoder);
 
 #endif

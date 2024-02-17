@@ -4,11 +4,10 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/home/sas/pico/pico_proj/",
                 "${env:PICO_SDK_PATH}/**"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/gcc",
+            //"compilerPath": "/usr/bin/gcc",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "linux-gcc-x64"

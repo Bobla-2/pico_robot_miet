@@ -7,6 +7,9 @@
         "motor_robot.h": "c",
         "motor_dc_pwm.h": "c",
         "math.h": "c",
-        "stdio.h": "c"
-    }
+        "stdio.h": "c",
+        "assert.h": "c",
+        "*.inc": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

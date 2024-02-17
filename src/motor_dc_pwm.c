@@ -38,11 +38,7 @@ void motor_init(motor_dc_pwm_t* motor){
     //     // pwm_init(slice_num_B, &config, true);
     // }
     // pwm_clear_irq(slice_num_A);
-    // pwm_clear_irq(slice_num_B);
-
-    // pwm_set_irq_enabled(slice_num_A, true);
-    // irq_set_exclusive_handler(PWM_IRQ_WRAP, on_pwm_wrap);
-    // irq_set_enabled(PWM_IRQ_WRAP, true);
+    
 
 }
 
@@ -71,5 +67,6 @@ void motor_brake(motor_dc_pwm_t* motor){
     motor->status = BRAKE;
     pwm_set_gpio_level(motor->gpioA, 1);
     pwm_set_gpio_level(motor->gpioB, 1);
+    
 }
 

@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "lib1.h": "c",
+        "stdlib.h": "c",
+        "time.h": "c",
+        "pwm.h": "c",
+        "motor_robot.h": "c",
+        "motor_dc_pwm.h": "c",
+        "math.h": "c",
+        "stdio.h": "c"
+    }
+}

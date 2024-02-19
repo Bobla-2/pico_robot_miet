@@ -60,10 +60,11 @@ void main_init(){
 int main() {
     
     main_init();
-    
+    int engle_temp = 180;
     while (true) {
         static uint32_t time_stamp;
         static uint32_t time_old_stamp;
+
         // static uint32_t temp;
         // static char temp_str[128];
         time_stamp = time_us_32(); //  125.000 ≈ 1mc
@@ -73,8 +74,13 @@ int main() {
                 // temp = 0;
                 gpio_put(PICO_DEFAULT_LED_PIN, true);
                 // motor_6612_robot_forward_turn_encoder(&motor_robot_6612, &enkoder_R, &enkoder_L, 90, 40);
-                motor_6612_robot_forward_encoder(&motor_robot_6612, &enkoder_R, &enkoder_L, 200, 80);
-                
+                // motor_6612_robot_forward_encoder(&motor_robot_6612, &enkoder_R, &enkoder_L, 200, 80);
+                if (motor_robot_6612.status_dc == STOP_){
+                    engle_temp = engle_temp * -1;
+
+                }
+                motor_6612_robot_forward_turn_enkoder(&motor_robot_6612, &enkoder_R, &enkoder_L, engle_temp, 50, 40);
+
                 printf("R:%d, L:%d||| LmK:%d, RmK:%d \r\n ", enkoder_R.count, enkoder_L.count, motor_robot_6612.k_L, motor_robot_6612.k_R);
                 // motor_6612_robot_forward(&motor_robot_6612, 30);
                 time_old_stamp = time_stamp;

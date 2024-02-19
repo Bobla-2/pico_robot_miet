@@ -38,8 +38,6 @@ void motor_init(motor_dc_pwm_t* motor){
     //     // pwm_init(slice_num_B, &config, true);
     // }
     // pwm_clear_irq(slice_num_A);
-    
-
 }
 
 void motor_start(motor_dc_pwm_t* motor){

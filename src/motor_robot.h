@@ -71,13 +71,13 @@ typedef struct {
 } motor_robot_t;
 
 
-void motor_robot_init(motor_robot_t* motor_robot);
-void motor_robot_forward(motor_robot_t* motor_robot, uint16_t speed);
-void motor_robot_forward_turn(motor_robot_t* motor_robot, uint DIR, uint engle);
-void motor_robot_turn_spot(motor_robot_t* motor_robot, uint DIR);
-void motor_robot_turn(motor_robot_t* motor_robot, uint DIR);
-void motor_robot_back(motor_robot_t* motor_robot);
-void motor_robot_stop(motor_robot_t* motor_robot);
+// void motor_robot_init(motor_robot_t* motor_robot);
+// void motor_robot_forward(motor_robot_t* motor_robot, uint16_t speed);
+// void motor_robot_forward_turn(motor_robot_t* motor_robot, uint DIR, uint engle);
+// void motor_robot_turn_spot(motor_robot_t* motor_robot, uint DIR);
+// void motor_robot_turn(motor_robot_t* motor_robot, uint DIR);
+// void motor_robot_back(motor_robot_t* motor_robot);
+// void motor_robot_stop(motor_robot_t* motor_robot);
 // void motor_init(motor_dc_pwm_t* motor);
 // void motor_start(motor_dc_pwm_t* motor);
 // void motor_stop(motor_dc_pwm_t* motor);
@@ -90,7 +90,8 @@ void motor_6612_robot_back(motor_dc_pwm_6612_t* motor_robot);
 void motor_6612_robot_stop(motor_dc_pwm_6612_t* motor_robot);
 
 void motor_6612_robot_forward_encoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L, uint len, uint speed);
-void motor_6612_robot_forward_turn_encoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L, uint engle, uint speed);
+// void motor_6612_robot_forward_turn_encoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L, uint engle, uint speed);
+void motor_6612_robot_forward_turn_enkoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L, int engle, uint speed, uint radius);
 
 
 #endif

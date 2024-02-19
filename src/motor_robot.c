@@ -42,17 +42,20 @@ void motor_6612_robot_init(motor_dc_pwm_6612_t* motor_robot){
     irq_set_enabled(PWM_IRQ_WRAP, true);
 }
 void motor_6612_robot_forward(motor_dc_pwm_6612_t* motor_robot, uint16_t speed){
-    motor_robot->status_dc = FORWARD;
-    gpio_put(motor_robot->gpio_Lin1, false);
-    gpio_put(motor_robot->gpio_Lin2, true);
-    gpio_put(motor_robot->gpio_Rin1, true);
-    gpio_put(motor_robot->gpio_Rin2, false);
-    gpio_put(motor_robot->gpio_stby, true);
+    // if (motor_robot->status_dc != FORWARD){
+    //     motor_robot->status_dc = FORWARD;
+        gpio_put(motor_robot->gpio_Lin1, false);
+        gpio_put(motor_robot->gpio_Lin2, true);
+        gpio_put(motor_robot->gpio_Rin1, true);
+        gpio_put(motor_robot->gpio_Rin2, false);
+        gpio_put(motor_robot->gpio_stby, true);
+    // }
     motor_robot->speed_req = speed;
     uint slice_num = pwm_gpio_to_slice_num(motor_robot->gpio_Rpwm);
     pwm_set_chan_level(slice_num, PWM_CHAN_A, motor_robot->speed_req + motor_robot->k_L);
     pwm_set_chan_level(slice_num, PWM_CHAN_B, motor_robot->speed_req + motor_robot->k_R);
     pwm_set_enabled(slice_num, true);
+    
    
 }
 
@@ -135,33 +138,29 @@ void motor_6612_robot_back(motor_dc_pwm_6612_t* motor_robot){
 void motor_6612_robot_forward_encoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L, uint len, uint speed){
     // enkoder_read(enkoder_R);
     // enkoder_read(enkoder_L);
-    static uint speep_control = 1700;
+    if(motor_robot->status_dc != FORWARD){
+       // delta_K = ((float)radius-half_width)/((float)radius+half_width);
+        enkoder_L->count = 0;
+        enkoder_R->count = 0;
+        motor_robot->status_dc = FORWARD;
+    }
+    static uint speed_control = 1700;
     if (enkoder_L->count > len){
         motor_6612_robot_stop(motor_robot);
-        speep_control = 1700;
+        speed_control = 1700;
         return;
     }
     motor_robot->k_R = (enkoder_L->count - enkoder_R->count) * 100;
     motor_robot->k_L = (enkoder_R->count - enkoder_L->count) * 100;
 
-    if (speep_control < speed*100 + 1){
-        speep_control += 50;
+    if (speed_control < speed*100 + 1){
+        speed_control += 50;
     }
-    motor_6612_robot_forward(motor_robot, speep_control); 
+    motor_6612_robot_forward(motor_robot, speed_control); 
 }
 
 void motor_6612_robot_turn_encoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L, uint engle, uint speed){
-    // enkoder_read(enkoder_R);
-    // enkoder_read(enkoder_L);
     engle = 30;// engle / 3;
-    // static bool sdf;
-    // if (sdf == false){
-    //     sdf = true;
-    //     enkoder_L->count = 0;
-    //     enkoder_R->count = 0;
-    // }
-    
-    
     uint slice_num = pwm_gpio_to_slice_num(motor_robot->gpio_Lpwm);
     
     gpio_put(motor_robot->gpio_stby, true);
@@ -192,4 +191,47 @@ void motor_6612_robot_turn_encoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* 
     } else return;
     pwm_set_enabled(slice_num, true);
 }
-// void motor_6612_robot_forward_turn(motor_dc_pwm_6612_t* motor_robot, uint DIR, uint engle);
+void motor_6612_robot_forward_turn_enkoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L, int engle, uint speed, uint radius){
+    static uint speed_control = 1700;
+    const float half_width = 5.0f;
+    static float delta_K;
+    // static float enkoder_L_count_delta;
+    static float enkoder_count_delta;
+    // if (enkoder_L->count > (int)((6.28f/360.0f)*(float)((radius-5)*engle))){
+    //     motor_6612_robot_stop(motor_robot);
+    //     speed_control = 1700;
+    //     return;
+    // }
+   
+
+    if(motor_robot->status_dc != FORWARD_TURN){
+        delta_K = ((float)radius-half_width)/((float)radius+half_width);
+        enkoder_L->count = 0;
+        enkoder_R->count = 0;
+        motor_robot->status_dc = FORWARD_TURN;
+    }
+    if (engle > 0){
+        if (enkoder_R->count > (int)((6.28f/360.0f)*(float)((radius-5)*engle))){
+            motor_6612_robot_stop(motor_robot);
+            speed_control = 1700;
+            return;
+        }
+        enkoder_count_delta = delta_K * enkoder_R->count;
+        motor_robot->k_R = (enkoder_L->count - enkoder_count_delta) * 100;
+        motor_robot->k_L = (enkoder_count_delta - enkoder_L->count) * 100;
+    } else {
+        if (enkoder_L->count > (int)((6.28f/360.0f)*(float)((radius-5)*(engle*-1)))){
+            motor_6612_robot_stop(motor_robot);
+            speed_control = 1700;
+            return;
+        }
+        enkoder_count_delta = delta_K * enkoder_L->count;
+        motor_robot->k_L = (enkoder_L->count - enkoder_count_delta) * 100;
+        motor_robot->k_R = (enkoder_count_delta - enkoder_L->count) * 100;
+    }
+     if (speed_control < speed*100 + 1){
+        speed_control += 50;
+    }
+    motor_6612_robot_forward(motor_robot, speed_control); 
+
+}

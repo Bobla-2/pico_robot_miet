@@ -9,7 +9,8 @@
         "math.h": "c",
         "stdio.h": "c",
         "assert.h": "c",
-        "*.inc": "c"
+        "*.inc": "c",
+        "irq.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

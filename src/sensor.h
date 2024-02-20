@@ -20,7 +20,7 @@ typedef struct {
 
 
 
-void sensor_init(sensor_t* sensor_mas, sensor_mode_t mode);
+void sensor_init(sensor_t* sensor_mas);
 void sensor_read(sensor_t* sensor_mas);
 
 #endif

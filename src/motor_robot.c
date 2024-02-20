@@ -216,7 +216,7 @@ void motor_6612_robot_forward_turn_enkoder(motor_dc_pwm_6612_t* motor_robot, enk
             speed_control = 1700;
             return;
         }
-        enkoder_count_delta = delta_K * enkoder_R->count;
+        enkoder_count_delta = (int)(delta_K * (float)enkoder_R->count);
         motor_robot->k_R = (enkoder_L->count - enkoder_count_delta) * 100;
         motor_robot->k_L = (enkoder_count_delta - enkoder_L->count) * 100;
     } else {
@@ -225,13 +225,12 @@ void motor_6612_robot_forward_turn_enkoder(motor_dc_pwm_6612_t* motor_robot, enk
             speed_control = 1700;
             return;
         }
-        enkoder_count_delta = delta_K * enkoder_L->count;
-        motor_robot->k_L = (enkoder_L->count - enkoder_count_delta) * 100;
-        motor_robot->k_R = (enkoder_count_delta - enkoder_L->count) * 100;
+        enkoder_count_delta = (int)(delta_K * (float)(enkoder_L->count));
+        motor_robot->k_L = (enkoder_R->count - enkoder_count_delta) * 100;
+        motor_robot->k_R = (enkoder_count_delta - enkoder_R->count) * 100;
     }
-     if (speed_control < speed*100 + 1){
+     if (speed_control < speed * 100 + 1){
         speed_control += 50;
     }
     motor_6612_robot_forward(motor_robot, speed_control); 
-
 }

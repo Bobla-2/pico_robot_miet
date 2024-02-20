@@ -4,10 +4,11 @@
 #include "enkoder.h"
 // #include <stdio.h>
 
-uint temp_gpio[] = {20,21,22};
+uint temp_gpio[] = {26,27,28};
 sensor_t state_sensor = {
     .gpio = temp_gpio,
     .len = 3,
+    .mode = ANALOG_sensor,
 };
 // motor_dc_pwm_t motor_dc_L = {
 //     .gpioA = 2,
@@ -44,7 +45,7 @@ enkoder_t enkoder_R = {
 
 void main_init(){
     stdio_init_all();
-    sensor_init(&state_sensor);
+    sensor_init(&state_sensor, ANALOG_sensor);
     enkoder_init(&enkoder_L, &enkoder_R);
     
     // motor_robot_init(&motor_robot);

@@ -16,7 +16,9 @@ add_executable(test src/main.c)
 target_link_libraries(test 
                     pico_stdlib
                     hardware_pwm
-                    hardware_irq 
+                    hardware_irq
+                    hardware_adc 
+                   
                     )
 target_sources(test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/sensor.c
                 # ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_dc_pwm.c)

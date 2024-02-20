@@ -33,16 +33,16 @@ typedef enum {
     STOP_,
 } motor_robot_status_t;
 
-typedef struct {
-    uint gpioA;
-    uint gpioB;
-    uint16_t speed;
-    uint16_t speed_req;
-    motor_direct_t direct;
-    // uint ID;
-    motor_dc_status_t status_dc;
+// typedef struct {
+//     uint gpioA;
+//     uint gpioB;
+//     uint16_t speed;
+//     uint16_t speed_req;
+//     motor_direct_t direct;
+//     // uint ID;
+//     motor_dc_status_t status_dc;
       
-}motor_dc_pwm_t;
+// }motor_dc_pwm_t;
 
 typedef struct {
     int k_L;
@@ -60,15 +60,15 @@ typedef struct {
     uint16_t speed_req;
     motor_direct_6612_t direct;
     // uint ID;
-    motor_dc_status_t status_dc;
+    motor_robot_status_t status_dc;
       
 }motor_dc_pwm_6612_t;
 
-typedef struct {
-    motor_dc_pwm_t * motor_L;
-    motor_dc_pwm_t * motor_R;
-    motor_robot_status_t status_dc;
-} motor_robot_t;
+// typedef struct {
+//     motor_dc_pwm_t * motor_L;
+//     motor_dc_pwm_t * motor_R;
+//     motor_robot_status_t status_dc;
+// } motor_robot_t;
 
 
 // void motor_robot_init(motor_robot_t* motor_robot);

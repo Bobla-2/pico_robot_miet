@@ -50,10 +50,10 @@ enkoder_t enkoder_R = {
 
 void main_init(){
     stdio_init_all();
-    //enkoder_init(&enkoder_L, &enkoder_R);
+    enkoder_init(&enkoder_L, &enkoder_R);
     
     
-    //motor_6612_robot_init(&motor_robot_6612);
+    motor_6612_robot_init(&motor_robot_6612);
     
     const uint LED_PIN = PICO_DEFAULT_LED_PIN;
     gpio_init(LED_PIN);
@@ -62,52 +62,43 @@ void main_init(){
 }
 
 int main() {
-    
     main_init();
-    int engle_temp = 180;
-    //  stdio_init_all();
+    int engle_temp = 360;
     gpio_put(PICO_DEFAULT_LED_PIN, false);
-    //adc_init();
- 
-    // Make sure GPIO is high-impedance, no pullups etc
-    //adc_gpio_init(26);
-    // Select ADC input 0 (GPIO26)
-    //adc_select_input(0);
     while (true) {
         // sensor_read(&sensor);
 
-        // static uint32_t time_stamp;
-        // static uint32_t time_old_stamp;
+        static uint32_t time_stamp;
+        static uint32_t time_old_stamp;
 
-        // // static uint32_t temp;
-        // // static char temp_str[128];
-        // time_stamp = time_us_32(); //  125.000 ≈ 1mc
-        // if  (time_stamp - time_old_stamp > 5000){
+        // static uint32_t temp;
+        // static char temp_str[128];
+        time_stamp = time_us_32(); //  125.000 ≈ 1mc
+        if  (time_stamp - time_old_stamp > 5000){
             
-        //     // if  (temp == 1){
-        //         // temp = 0;
-        //         gpio_put(PICO_DEFAULT_LED_PIN, true);
-        //         // motor_6612_robot_forward_turn_encoder(&motor_robot_6612, &enkoder_R, &enkoder_L, 90, 40);
-        //         // motor_6612_robot_forward_encoder(&motor_robot_6612, &enkoder_R, &enkoder_L, 200, 80);
-        //         if (motor_robot_6612.status_dc == STOP_){
-        //             engle_temp = engle_temp * -1;
+            // if  (temp == 1){
+                // temp = 0;
+                // gpio_put(PICO_DEFAULT_LED_PIN, true);
+                // motor_6612_robot_forward_turn_encoder(&motor_robot_6612, &enkoder_R, &enkoder_L, 90, 40);
+                // motor_6612_robot_forward_encoder(&motor_robot_6612, &enkoder_R, &enkoder_L, 200, 80);
+                if (motor_robot_6612.status_dc == STOP_){
+                    engle_temp = engle_temp * -1;
+                }
+                motor_6612_robot_forward_turn_enkoder(&motor_robot_6612, &enkoder_R, &enkoder_L, engle_temp, 50, 40);
 
-        //         }
-        //         motor_6612_robot_forward_turn_enkoder(&motor_robot_6612, &enkoder_R, &enkoder_L, engle_temp, 50, 40);
-
-        //         printf("R:%d, L:%d||| LmK:%d, RmK:%d \r\n ", enkoder_R.count, enkoder_L.count, motor_robot_6612.k_L, motor_robot_6612.k_R);
-                 printf("adc 26 = %d\r\n",sensor.state_a[0]);
-                 sleep_ms(500);
+                printf("R:%d, L:%d||| LmK:%d, RmK:%d \r\n ", enkoder_R.count, enkoder_L.count, motor_robot_6612.k_L, motor_robot_6612.k_R);
+                printf("adc =%hu//%hu//%hu\r\n",sensor.state_a[0], sensor.state_a[1], sensor.state_a[2]);
+                // sleep_ms(500);
                  //adc_read();
                   
-        //         // motor_6612_robot_forward(&motor_robot_6612, 30);
-        //         time_old_stamp = time_stamp;
-        //     // } else {
-        //     //     temp = 1;
-        //     //     gpio_put(PICO_DEFAULT_LED_PIN, false);
-        //     //     // motor_6612_robot_stop(&motor_robot_6612);
-        //     //     time_old_stamp = time_stamp;
-        //     // }
-        // }
+                // motor_6612_robot_forward(&motor_robot_6612, 30);
+                time_old_stamp = time_stamp;
+            // } else {
+            //     temp = 1;
+            //     gpio_put(PICO_DEFAULT_LED_PIN, false);
+            //     // motor_6612_robot_stop(&motor_robot_6612);
+            //     time_old_stamp = time_stamp;
+            // }
+        }
     }
 }

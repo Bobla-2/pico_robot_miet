@@ -9,7 +9,7 @@ typedef enum {
 } sensor_mode_t;
 typedef struct {
     uint* gpio;
-    uint8_t len;
+    uint16_t len;
     uint32_t state_d;
     uint16_t* state_a;   
     

@@ -10,18 +10,23 @@ volatile bool flag = false;
 
 irq_handler_t  on_adc_wrap(void) {
     gpio_put(PICO_DEFAULT_LED_PIN, true);
-    static uint16_t i = 0;
-    flag = true;
+    // static uint16_t i = 0;
+    // flag = true;
     //printf("123");
     
     // //if ((uint8_t)4 == adc_fifo_get_level()){
-    // for (int i = 0; sensor_en->len - 1;  i++){
+   for (size_t i = 0; i < sensor_en->len;  i++){
+        sensor_en->state_a[i] = adc_fifo_get();
+   }
+//    size_t
         // sensor_en->state_a[0] = adc_fifo_get();
-
-    //adc_fifo_drain();
-    sensor_en->state_a[0] = adc_fifo_get();
-    while (!adc_fifo_is_empty())
-        (void) adc_fifo_get();
+        // sensor_en->state_a[1] = adc_fifo_get();
+        // sensor_en->state_a[2] = adc_fifo_get();
+   
+    adc_fifo_drain();
+    // sensor_en->state_a[0] = adc_fifo_get();
+    // while (!adc_fifo_is_empty())
+    //     (void) adc_fifo_get();
     //printf("H");
     //adc_irq_set_enabled (false);
     //printf("H");
@@ -34,7 +39,7 @@ irq_handler_t  on_adc_wrap(void) {
          //printf("");
     // }
     // //}
-    //adc_fifo_drain();
+    // adc_fifo_drain();
     // adc_run(false);
 
 }
@@ -52,11 +57,11 @@ void sensor_init(sensor_t* sensor_mas){
         adc_init();
         // adc_irq_set_enabled(true);
         
-        // uint16_t temp;
-        //for (uint i = 0; i < sensor_mas->len; i++){
-            adc_gpio_init(26);// + i);
-            adc_select_input(0);
-            // temp |= (1 << i);
+        uint16_t temp;
+        for (uint i = 0; i < sensor_mas->len; i++){
+            adc_gpio_init(26 + i);
+            temp |= (1 << i);
+        }
             // temp = 7;
             // adc_select_input(0);
 
@@ -65,35 +70,36 @@ void sensor_init(sensor_t* sensor_mas){
         adc_fifo_setup(
             true,
             false,
-            4,
-            //(uint16_t)sensor_mas->len - 1,
+            //4,
+            sensor_mas->len,
             false,
             true
         );
-        //if (irq_has_shared_handler(ADC_IRQ_FIFO)){
-        //    irq_add_shared_handler(ADC_IRQ_FIFO,on_adc_wrap, PICO_SHARED_IRQ_HANDLER_DEFAULT_ORDER_PRIORITY );
-        //}else{
+        if (irq_has_shared_handler(ADC_IRQ_FIFO)){
+           irq_add_shared_handler(ADC_IRQ_FIFO, on_adc_wrap, PICO_SHARED_IRQ_HANDLER_DEFAULT_ORDER_PRIORITY );
+        }else{
             irq_set_exclusive_handler(ADC_IRQ_FIFO, on_adc_wrap);
-        //}
+        }
         irq_set_priority (ADC_IRQ_FIFO, PICO_HIGHEST_IRQ_PRIORITY);
         // // irq_set_priority(ADC_IRQ_FIFO, PICO_DEF);	
         irq_set_enabled(ADC_IRQ_FIFO, true);
-        // // adc_set_round_robin(temp);
+        adc_set_round_robin(temp);
+        // adc_select_input(0);
         
         // gpio_put(PICO_DEFAULT_LED_PIN, true);
         adc_irq_set_enabled(true);
-        adc_set_clkdiv(10000);
+        adc_set_clkdiv(1000);
         adc_fifo_drain();
-        printf("!");
+        //printf("!");
         adc_run(true);
         //adc_fifo_get_blocking();
         
-        while (flag == false)
-        {
-            printf("=");
-            sleep_ms(100);
-            /* code */
-        }
+        // while (flag == false)
+        // {
+        //     printf("=");
+        //     sleep_ms(100);
+        //     /* code */
+        // }
         printf("\r\nXUI!");
     // }
 }

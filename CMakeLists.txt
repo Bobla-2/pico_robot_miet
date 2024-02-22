@@ -18,6 +18,7 @@ target_link_libraries(test
                     hardware_pwm
                     hardware_irq
                     hardware_adc 
+                    hardware_watchdog
                    
                     )
 target_sources(test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/sensor.c

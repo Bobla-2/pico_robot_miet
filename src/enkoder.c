@@ -14,8 +14,8 @@ void gpio_callback(uint gpio, uint32_t events){
     
 }
 void enkoder_init(enkoder_t* enkoder_L, enkoder_t* enkoder_R){
-    gpio_set_irq_enabled_with_callback(enkoder_L->gpio, GPIO_IRQ_EDGE_RISE, true, &gpio_callback);
-    gpio_set_irq_enabled_with_callback(enkoder_R->gpio, GPIO_IRQ_EDGE_RISE, true, &gpio_callback);
+    gpio_set_irq_enabled_with_callback(enkoder_L->gpio, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
+    gpio_set_irq_enabled_with_callback(enkoder_R->gpio, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
     enkoder_mas[0] = enkoder_L;
     enkoder_mas[1] = enkoder_R;
 }

@@ -12,15 +12,12 @@ typedef struct {
     uint16_t len;
     uint32_t state_d;
     uint16_t* state_a;   
-    
-    
-
     sensor_mode_t mode;
 } sensor_t;
 
 
 
 void sensor_init(sensor_t* sensor_mas);
-void sensor_read(sensor_t* sensor_mas);
+void sensor_read_digital();
 
 #endif

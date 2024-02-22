@@ -10,7 +10,9 @@
         "stdio.h": "c",
         "assert.h": "c",
         "*.inc": "c",
-        "irq.h": "c"
+        "irq.h": "c",
+        "watchdog.h": "c"
     },
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "disabled",
+    "C_Cpp.default.compilerPath": "c:/program files/raspberry pi/pico sdk v1.5.1/gcc-arm-none-eabi/bin/arm-none-eabi-gcc.exe"
 }

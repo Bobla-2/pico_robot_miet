@@ -9,13 +9,15 @@
 // #include <stdlib.h>
 uint motor_slise_rec;
 
+//------------------------irq---------------------//
+
 void on_pwm_wrap1() {
     pwm_clear_irq(motor_slise_rec);
     gpio_put(PICO_DEFAULT_LED_PIN, true);
 }
 
 
-//---------------------------------------------
+//------------------------low-level-fun---------------------//
 
 
 void motor_6612_robot_init(motor_dc_pwm_6612_t* motor_robot){
@@ -135,6 +137,10 @@ void motor_6612_robot_back(motor_dc_pwm_6612_t* motor_robot){
     pwm_set_enabled(slice_num, true);
 }
 
+
+//------------------------motor_whis_encoder---------------------//
+
+
 void motor_6612_robot_forward_encoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L, uint len, uint speed){
     // enkoder_read(enkoder_R);
     // enkoder_read(enkoder_L);
@@ -145,13 +151,13 @@ void motor_6612_robot_forward_encoder(motor_dc_pwm_6612_t* motor_robot, enkoder_
         motor_robot->status_dc = FORWARD;
     }
     static uint speed_control = 1700;
-    if (enkoder_L->count > len){
+    if (enkoder_L->count > len * 2){
         motor_6612_robot_stop(motor_robot);
         speed_control = 1700;
         return;
     }
-    motor_robot->k_R = (enkoder_L->count - enkoder_R->count) * 100;
-    motor_robot->k_L = (enkoder_R->count - enkoder_L->count) * 100;
+    motor_robot->k_R = (enkoder_L->count - enkoder_R->count) * 50;
+    motor_robot->k_L = (enkoder_R->count - enkoder_L->count) * 50;
 
     if (speed_control < speed*100 + 1){
         speed_control += 50;
@@ -191,43 +197,38 @@ void motor_6612_robot_turn_encoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* 
     } else return;
     pwm_set_enabled(slice_num, true);
 }
-void motor_6612_robot_forward_turn_enkoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L, int engle, uint speed, uint radius){
+void motor_6612_robot_forward_turn_enkoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L, int engle, uint speed, int radius){
     static uint speed_control = 1700;
-    const float half_width = 5.0f;
+    const float half_width = 6.3f;
     static float delta_K;
-    // static float enkoder_L_count_delta;
-    static float enkoder_count_delta;
-    // if (enkoder_L->count > (int)((6.28f/360.0f)*(float)((radius-5)*engle))){
-    //     motor_6612_robot_stop(motor_robot);
-    //     speed_control = 1700;
-    //     return;
-    // }
-   
+    
+    static int enkoder_count_delta;
 
     if(motor_robot->status_dc != FORWARD_TURN){
         delta_K = ((float)radius-half_width)/((float)radius+half_width);
         enkoder_L->count = 0;
         enkoder_R->count = 0;
+        speed_control = 1700;
         motor_robot->status_dc = FORWARD_TURN;
     }
     if (engle > 0){
-        if (enkoder_R->count > (int)((6.28f/360.0f)*(float)((radius-5)*engle))){
+        if ((enkoder_L->count + enkoder_R->count) > (int)((6.28f/360.0f)*(float)(radius*engle)) * 4){
+            printf("R:%d, L:%d   %f    %d| \r\n ", enkoder_R->count, enkoder_L->count, delta_K, enkoder_count_delta);
             motor_6612_robot_stop(motor_robot);
-            speed_control = 1700;
             return;
         }
         enkoder_count_delta = (int)(delta_K * (float)enkoder_R->count);
-        motor_robot->k_R = (enkoder_L->count - enkoder_count_delta) * 100;
-        motor_robot->k_L = (enkoder_count_delta - enkoder_L->count) * 100;
+        motor_robot->k_R = (enkoder_L->count - enkoder_count_delta) * 50;
+        motor_robot->k_L = (enkoder_count_delta - enkoder_L->count) * 50;
     } else {
-        if (enkoder_L->count > (int)((6.28f/360.0f)*(float)((radius-5)*(engle*-1)))){
+        if ((enkoder_R->count + enkoder_L->count) > (int)((6.28f/360.0f)*(float)(radius*engle*-1)) * 4){
+            printf("R:%d, L:%d|   %f   %d\r\n ", enkoder_R->count, enkoder_L->count, delta_K, enkoder_count_delta);
             motor_6612_robot_stop(motor_robot);
-            speed_control = 1700;
             return;
         }
         enkoder_count_delta = (int)(delta_K * (float)(enkoder_L->count));
-        motor_robot->k_L = (enkoder_R->count - enkoder_count_delta) * 100;
-        motor_robot->k_R = (enkoder_count_delta - enkoder_R->count) * 100;
+        motor_robot->k_L = (enkoder_R->count - enkoder_count_delta) * 50;
+        motor_robot->k_R = (enkoder_count_delta - enkoder_R->count) * 50;
     }
      if (speed_control < speed * 100 + 1){
         speed_control += 50;

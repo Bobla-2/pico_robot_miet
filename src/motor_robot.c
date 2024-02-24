@@ -199,7 +199,7 @@ void motor_6612_robot_turn_encoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* 
 }
 void motor_6612_robot_forward_turn_enkoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L, int engle, uint speed, int radius){
     static uint speed_control = 1700;
-    const float half_width = 6.3f;
+    const float half_width = 5.7f;
     static float delta_K;
     
     static int enkoder_count_delta;
@@ -222,8 +222,8 @@ void motor_6612_robot_forward_turn_enkoder(motor_dc_pwm_6612_t* motor_robot, enk
         static int enkoder_L_buf; //= (int)((float)(enkoder_L->count)/delta_K)
         enkoder_R_buf = (int)((float)(enkoder_R->count)*delta_K);
         enkoder_L_buf = (int)((float)(enkoder_L->count)/delta_K);
-        motor_robot->k_L = (enkoder_R_buf - enkoder_L_buf) * 50;
-        motor_robot->k_R = (enkoder_L_buf - enkoder_R_buf) * 50;
+        motor_robot->k_L = (enkoder_R_buf - enkoder_L_buf) * 240;
+        motor_robot->k_R = (enkoder_L_buf - enkoder_R_buf) * 240;
     } else {
         if ((enkoder_R->count + enkoder_L->count) > (int)((6.28f/360.0f)*(float)(radius*(engle*-1))) * 4){
             printf("R:%d, L:%d|   %f   %d\r\n ", enkoder_R->count, enkoder_L->count, delta_K, enkoder_count_delta);
@@ -235,8 +235,8 @@ void motor_6612_robot_forward_turn_enkoder(motor_dc_pwm_6612_t* motor_robot, enk
         static int enkoder_L_buf; //= (int)((float)(enkoder_L->count)*delta_K)
         enkoder_R_buf = (int)((float)(enkoder_R->count)/delta_K);
         enkoder_L_buf = (int)((float)(enkoder_L->count)*delta_K);
-        motor_robot->k_L = (enkoder_R_buf - enkoder_L_buf) * 50;
-        motor_robot->k_R = (enkoder_L_buf - enkoder_R_buf) * 50;
+        motor_robot->k_L = (enkoder_R_buf - enkoder_L_buf) * 240;
+        motor_robot->k_R = (enkoder_L_buf - enkoder_R_buf) * 240;
     }
      if (speed_control < speed * 100 + 1){
         //speed_control += 50;

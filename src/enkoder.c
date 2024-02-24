@@ -20,16 +20,28 @@ void enkoder_init(enkoder_t* enkoder_L, enkoder_t* enkoder_R){
     enkoder_mas[1] = enkoder_R;
 }
 
+void enkoder_init_old(enkoder_t* enkoder_L, enkoder_t* enkoder_R){
+    gpio_init(enkoder_L->gpio);
+    gpio_init(enkoder_R->gpio);
+    gpio_set_dir(enkoder_R->gpio, false);
+    gpio_set_dir(enkoder_L->gpio, false);
+    gpio_pull_down(enkoder_R->gpio);
+    gpio_pull_down(enkoder_L->gpio);
+    enkoder_mas[0] = enkoder_L;
+    enkoder_mas[1] = enkoder_R;
+}
 
-
-// void enkoder_read(enkoder_t* enkoder){
-//     static bool temp_state;
-//     temp_state = gpio_get(enkoder->gpio);
-//     if (temp_state && !enkoder->state){
-//         enkoder->state = true;
-//         enkoder->count += 1;
-//     } else if (!temp_state && enkoder->state){
-//         enkoder->state = false;
-//     }
-// } 
+void enkoder_read(){
+    static bool temp_state;
+    for(int i = 0; i < 2; i++){
+        temp_state = gpio_get(enkoder_mas[i]->gpio);
+        if (temp_state && !enkoder_mas[i]->state){
+            enkoder_mas[i]->state = true;
+            enkoder_mas[i]->count += 1;
+        } else if (!temp_state && enkoder_mas[i]->state){
+            enkoder_mas[i]->state = false;
+            enkoder_mas[i]->count += 1;
+        }
+    }
+} 
 

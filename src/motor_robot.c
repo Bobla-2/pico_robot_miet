@@ -212,7 +212,7 @@ void motor_6612_robot_forward_turn_enkoder(motor_dc_pwm_6612_t* motor_robot, enk
         motor_robot->status_dc = FORWARD_TURN;
     }
     if (engle > 0){
-        if ((enkoder_L->count + enkoder_R->count) > (int)((6.28f/360.0f)*(float)(radius*engle) * 4.f * 1.03f*0.966f)){
+        if ((enkoder_L->count + enkoder_R->count) > (int)((6.28f/360.0f)*(float)(radius*engle) * 4.f * 1.03f*0.968f * ((radius*1.666f/1000.f)+0.9f))){
             printf("R:%d, L:%d   %f   %d| \r\n ", enkoder_R->count, enkoder_L->count, delta_K, enkoder_count_delta);
             motor_6612_robot_stop(motor_robot);
             return;
@@ -225,7 +225,7 @@ void motor_6612_robot_forward_turn_enkoder(motor_dc_pwm_6612_t* motor_robot, enk
         motor_robot->k_L = (enkoder_R_buf - enkoder_L_buf+2) * 240;
         motor_robot->k_R = (enkoder_L_buf - enkoder_R_buf-2) * 240;
     } else {
-        if ((enkoder_R->count + enkoder_L->count) > (int)((6.28f/360.0f)*(float)(radius*(engle*-1)) * 4.f * 0.966f)){
+        if ((enkoder_R->count + enkoder_L->count) > (int)((6.28f/360.0f)*(float)(radius*(engle*-1)) * 4.f * 0.964f * ((radius*1.666f/1000.f)+0.9f))){
             printf("R:%d, L:%d|   %f   %d\r\n ", enkoder_R->count, enkoder_L->count, delta_K, enkoder_count_delta);
             motor_6612_robot_stop(motor_robot);
             return;

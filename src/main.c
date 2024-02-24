@@ -49,7 +49,7 @@ void main_init(){
 
 int main() {
     main_init();
-    int engle_temp = 330;
+    int engle_temp = 360;
     gpio_put(PICO_DEFAULT_LED_PIN, false);
     while (true) {
         static uint32_t time_stamp;

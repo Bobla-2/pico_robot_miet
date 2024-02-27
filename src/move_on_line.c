@@ -1,22 +1,19 @@
 
-#include "lib1.h"
+// #include "lib1.h"
+
 
 // #include "pico_stdlib/include/pico/stdlib.h"
 #include "pico/stdlib.h"
 // #include "hardware_gpio.h"
+motor_dc_pwm_6612_t *en_motor;
+sensor_t *en_sensor_lone;
 
-int test_fn1() {
+void move_line_init(sensor_t sensor_line, motor_dc_pwm_6612_t motor) { 
 
-    const uint LED_PIN = 25;
-    gpio_init(LED_PIN);
+}
+
+void move_line_core(void) {
+
     
-    gpio_set_dir(LED_PIN, GPIO_OUT);
-    while (true) {
-        
-        gpio_put(LED_PIN, 1);
-        sleep_ms(250);
-        gpio_put(LED_PIN, 0);
-        sleep_ms(250);
-        
-    }
+    
 }

@@ -29,7 +29,7 @@ move_line_t move_line_hangler_sensor (void){
 
     if (en_sensor_line->mode == ANALOG_sensor){
         
-        // for (int i = 0; i < en_sensor_line->len; i++){
+        // for (int i = 0; i < en_sensor_line->len; i++){/
 
         //     en_sensor_line->state_a[i]
         // }

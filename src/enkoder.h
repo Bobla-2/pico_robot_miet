@@ -6,7 +6,7 @@
 typedef struct {
     uint gpio;
     bool state;
-    int count;
+    volatile int count;
     
 } enkoder_t;
 

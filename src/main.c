@@ -48,7 +48,7 @@ void main_init(){
     if (watchdog_caused_reboot()) printf("Rebooted by Watchdog!\n");
     watchdog_enable(100, 1);
     motor_robot_init(&motor_robot_6612, &enkoder_R, &enkoder_L);
-    enkoder_init(&enkoder_L, &enkoder_R);
+    enkoder_init_old(&enkoder_L, &enkoder_R);
     sensor_init(&sensor);
     move_line_init(&sensor);
 }
@@ -64,12 +64,12 @@ int main() {
         static uint32_t time_old_stamp;
 
         time_stamp = time_us_32(); //  125.000 ≈ 1mc
-        if  (time_stamp - time_old_stamp > 5000){ // 5000
+        if  (time_stamp - time_old_stamp > 1000){ // 5000
             watchdog_update();
            
 
             ///// user code begin //////------------------------------------
-
+            enkoder_read();
 
              
             if (motor_robot_6612.status_dc == STOP_){

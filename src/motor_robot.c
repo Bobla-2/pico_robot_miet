@@ -248,3 +248,7 @@ void motor_robot_forward_turn_enkoder(int engle, uint speed, int radius, bool in
     }
     motor_6612_robot_forward(en_motor, speed_control); 
 }
+
+void motor_robot_stop(void){
+    motor_6612_robot_stop(en_motor);
+}

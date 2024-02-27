@@ -49,10 +49,10 @@ void move_line_hangler_sensor (uint *buf_state){
         bool temp;
         for (uint i = 0; i < en_sensor_line->len; i++){
             temp = (en_sensor_line->state_a[i] > sens_level) ? true : false;
-            buf_state |= temp << i;
+            *buf_state |= temp << i;
         }
     } else {
-        buf_state = en_sensor_line->state_d;
+        *buf_state = en_sensor_line->state_d;
     }
 }
 

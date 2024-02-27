@@ -5,11 +5,11 @@
 #include "sensor.h"
 #include "motor_robot.h"
 
-typedef enum {
-    MOVE_LINE_FORWARD_LEFT,
-    MOVE_LINE_FORWARD_RIGHT,
-    MOVE_LINE_STOP,
-}move_line_t;
+enum move_line_t {
+    MOVE_LINE_3_FORWARD_LEFT,
+    MOVE_LINE_3_FORWARD_RIGHT,
+    MOVE_LINE_3_STOP,
+};
 
 
 

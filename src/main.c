@@ -75,7 +75,7 @@ int main() {
             if (motor_robot_6612.status_dc == STOP_){
                 engle_temp = engle_temp * -1;
             }
-            motor_robot_forward_turn_enkoder(engle_temp, 50, 30, false);
+            motor_robot_forward_turn_enkoder(engle_temp, 50, 60, false);
                 
 
 

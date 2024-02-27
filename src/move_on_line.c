@@ -10,7 +10,7 @@ uint en_speed;
 
 void move_line_init(sensor_t *sensor_line) { 
     en_sensor_line = sensor_line;
-    en_speed 40;
+    en_speed = 40;
 }
 
 void move_line_deinit(void) { 

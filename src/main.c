@@ -47,11 +47,10 @@ void main_init(){
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
     if (watchdog_caused_reboot()) printf("Rebooted by Watchdog!\n");
     watchdog_enable(100, 1);
-
-    motor_6612_robot_init(&motor_robot_6612);
+    motor_robot_init(&motor_robot_6612, &enkoder_R, &enkoder_L);
     enkoder_init(&enkoder_L, &enkoder_R);
     sensor_init(&sensor);
-    move_line_init(&sensor, &motor_robot_6612)
+    move_line_init(&sensor);
 }
 
  //-------------------main cycle---------------------//
@@ -76,8 +75,8 @@ int main() {
             if (motor_robot_6612.status_dc == STOP_){
                 engle_temp = engle_temp * -1;
             }
-            motor_6612_robot_forward_turn_enkoder(&motor_robot_6612, &enkoder_R, &enkoder_L, engle_temp, 50, 30);
-
+            motor_robot_forward_turn_enkoder(engle_temp, 50, 30, false);
+                
 
 
 

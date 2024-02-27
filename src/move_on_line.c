@@ -7,55 +7,52 @@
 sensor_t *en_sensor_line;
 bool invers_senser;
 uint en_speed;
+uint16_t sens_level;
 
 void move_line_init(sensor_t *sensor_line) { 
     en_sensor_line = sensor_line;
     en_speed = 40;
+    sens_level = 1000;
 }
 
 void move_line_deinit(void) { 
     en_sensor_line = NULL;
 }
 
-move_line_t move_line_hangler_sensor (void);
+void move_line_hangler_sensor (uint *buf_state);
 
 void move_line_core(void) {
-    move_line_hangler_sensor();
-     
-}
-
-move_line_t move_line_hangler_sensor (void){
-    bool buf_state[en_sensor_line->len];
-
-    if (en_sensor_line->mode == ANALOG_sensor){
-        
-        // for (int i = 0; i < en_sensor_line->len; i++){/
-
-        //     en_sensor_line->state_a[i]
-        // }
-        if (en_sensor_line->state_a[1] > en_sensor_line->state_a[0] && en_sensor_line->state_a[1] > en_sensor_line->state_a[2]){
-            if (en_sensor_line->state_a[0] < en_sensor_line->state_a[2]){
-                motor_robot_forward_turn_enkoder(
-                    1,
-                    en_speed,
-                    100/en_sensor_line->state_a[2]-en_sensor_line->state_a[0],
-                    true
-                );
-            } else {
-                motor_robot_forward_turn_enkoder(
-                    -1, 
-                    en_speed, 
-                    100/en_sensor_line->state_a[0]-en_sensor_line->state_a[1], 
-                    true
-                );
-            }
-
-        } else {
-            for (uint32_t i = 0; i < en_sensor_line->len; i++){
-                buf_state[i] = en_sensor_line->state_d & (1 << i);
-            }
+    uint buf_state;
+    move_line_hangler_sensor(&buf_state);
+    if (en_sensor_line->len == 3){
+        switch (buf_state){
+        case MOVE_LINE_3_STOP:
+            motor_robot_stop();
+            break;
+        case MOVE_LINE_3_FORWARD_LEFT:
+            motor_robot_forward_turn_enkoder(-1, en_speed, 30, true);
+            break;
+        case MOVE_LINE_3_FORWARD_RIGHT:
+            motor_robot_forward_turn_enkoder(1, en_speed, 30, true);
+            break;
+        default:
+            break;
         }
-
+    
+    } else {
+        print("error: MOVE_LINE en_sensor_line->len");
     }
-
 }
+
+void move_line_hangler_sensor (uint *buf_state){
+    if (en_sensor_line->mode == ANALOG_sensor){
+        bool temp;
+        for (uint i = 0; i < en_sensor_line->len; i++){
+            temp = (en_sensor_line->state_a[i] > sens_level) ? true : false;
+            buf_state |= temp << i;
+        }
+    } else {
+        buf_state = en_sensor_line->state_d;
+    }
+}
+

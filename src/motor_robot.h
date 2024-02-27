@@ -74,4 +74,7 @@ void motor_robot_forward_turn_enkoder(int engle, uint speed, int radius, bool in
 /// @param enkoder_L struct
 void motor_robot_init(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L);
 
+/// @brief turn off all motors
+void motor_robot_stop(void);
+
 #endif

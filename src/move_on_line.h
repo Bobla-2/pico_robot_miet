@@ -6,9 +6,9 @@
 #include "motor_robot.h"
 
 enum move_line_t {
-    MOVE_LINE_3_FORWARD_LEFT,
-    MOVE_LINE_3_FORWARD_RIGHT,
-    MOVE_LINE_3_STOP,
+    MOVE_LINE_3_FORWARD_LEFT = 1,
+    MOVE_LINE_3_FORWARD_RIGHT = 4,
+    MOVE_LINE_3_STOP = 7,
 };
 
 

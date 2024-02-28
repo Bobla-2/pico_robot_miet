@@ -75,11 +75,11 @@ int main() {
             if (motor_robot_6612.status_dc == STOP_){
                 engle_temp = engle_temp * -1;
             }
-            motor_robot_forward_turn_enkoder(engle_temp, 50, 60, false);
+            motor_robot_forward_turn_enkoder(engle_temp, 50, 30, false);
                 
 
 
-
+            // move_line_core();
 
             
 
@@ -87,7 +87,7 @@ int main() {
             ////// user code  end //////----------------------------------
 
             // printf("R:%d, L:%d||| LmK:%d, RmK:%d \r\n ", enkoder_R.count, enkoder_L.count, motor_robot_6612.k_L, motor_robot_6612.k_R);
-            // printf("adc =%hu//%hu//%hu\r\n",sensor.state_a[0], sensor.state_a[1], sensor.state_a[2]);
+            printf("adc =%d//%d//%d\r\n",sensor.state_a[0], sensor.state_a[1], sensor.state_a[2]);
             time_old_stamp = time_stamp;
            
         }

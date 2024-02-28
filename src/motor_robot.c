@@ -215,7 +215,7 @@ void motor_robot_forward_turn_enkoder(int engle, uint speed, int radius, bool in
     }
     if (engle > 0){
         if (!infinity_enable){
-            if ((en_encoder_l->count + en_encoder_r->count) > (int)((6.28f/360.0f)*(float)(radius*engle) * 4.f * 1.03f*0.968f * ((radius*1.666f/1000.f)+0.9f))){
+            if ((en_encoder_l->count + en_encoder_r->count) > (int)((6.28f/360.0f)*(float)(radius*engle) * 4.f * 1.03f*0.946f * ((radius*1.666f/1000.f)+0.9f))){
                 printf("R:%d, L:%d   %f   %d| \r\n ", en_encoder_r->count, en_encoder_l->count, delta_K, enkoder_count_delta);
                 motor_6612_robot_stop(en_motor);
                 return;
@@ -229,7 +229,7 @@ void motor_robot_forward_turn_enkoder(int engle, uint speed, int radius, bool in
         en_motor->k_R = (enkoder_L_buf - enkoder_R_buf-2) * 240;
     } else {
         if (!infinity_enable){
-            if ((en_encoder_r->count + en_encoder_l->count) > (int)((6.28f/360.0f)*(float)(radius*(engle*-1)) * 4.f * 0.964f * ((radius*1.666f/1000.f)+0.9f))){
+            if ((en_encoder_r->count + en_encoder_l->count) > (int)((6.28f/360.0f)*(float)(radius*(engle*-1)) * 4.f * 0.944f * ((radius*1.666f/1000.f)+0.9f))){
                 printf("R:%d, L:%d|   %f   %d\r\n ", en_encoder_r->count, en_encoder_l->count, delta_K, enkoder_count_delta);
                 motor_6612_robot_stop(en_motor);
                 return;

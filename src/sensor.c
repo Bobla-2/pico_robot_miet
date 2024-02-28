@@ -36,7 +36,7 @@ void sensor_init(sensor_t* sensor_mas){
             false,
             sensor_mas->len,
             false,
-            true
+            false
         );
         if (irq_has_shared_handler(ADC_IRQ_FIFO)){
            irq_add_shared_handler(ADC_IRQ_FIFO, &on_adc_wrap, PICO_SHARED_IRQ_HANDLER_DEFAULT_ORDER_PRIORITY );

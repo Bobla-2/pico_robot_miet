@@ -7,6 +7,7 @@
 #include "hardware/watchdog.h"
 // #include <stdio.h>
 #include "move_on_line.h"
+#include "driver_motor_encoder.h"
 
 
 //-------------------init strukt for modul---------------------//
@@ -47,7 +48,8 @@ void main_init(){
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
     if (watchdog_caused_reboot()) printf("Rebooted by Watchdog!\n");
     watchdog_enable(100, 1);
-    motor_robot_init(&motor_robot_6612, &enkoder_R, &enkoder_L);
+    // motor_robot_init(&motor_robot_6612, &enkoder_R, &enkoder_L);
+    driver_motor_init(&motor_robot_6612, &enkoder_R, &enkoder_L);
     enkoder_init_old(&enkoder_L, &enkoder_R);
     sensor_init(&sensor);
     move_line_init(&sensor);
@@ -72,14 +74,14 @@ int main() {
             enkoder_read();
 
              
-            if (motor_robot_6612.status_dc == STOP_){
-                engle_temp = engle_temp * -1;
-            }
-            motor_robot_forward_turn_enkoder(engle_temp, 50, 30, false);
+            // if (motor_robot_6612.status_dc == STOP_){
+            //     engle_temp = engle_temp * -1;
+            // }
+            // //motor_robot_forward_turn_enkoder(engle_temp, 50, 30, false);
                 
 
 
-            // move_line_core();
+            move_line_core();
 
             
 

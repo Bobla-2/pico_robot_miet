@@ -3,6 +3,7 @@
 #include "motor_robot.h"
 #include "enkoder.h"
 #include "sensor.h"
+#include "driver_motor_encoder.h"
 
 sensor_t *en_sensor_line;
 bool invers_senser;
@@ -42,14 +43,28 @@ void move_line_core(void) {
 
         switch (buf_state){
         case MOVE_LINE_3_STOP:
-            motor_robot_stop();
+        driver_motor_stop();
+            // motor_robot_stop();
             break;
         case MOVE_LINE_3_FORWARD_LEFT:
-            motor_robot_forward_turn_enkoder(-1, en_speed, 100, true);
+            driver_motor_forward_left(30,20);
+            // motor_robot_forward_turn_enkoder(-1, en_speed, 100, true);
             break;
         case MOVE_LINE_3_FORWARD_RIGHT:
-            motor_robot_forward_turn_enkoder(1, en_speed, 100, true);
+            driver_motor_forward_right(30,20);
+            // motor_robot_forward_turn_enkoder(1, en_speed, 100, true);
             break;
+        case MOVE_LINE_3_FORWARD:
+            driver_motor_forward(20);
+            // motor_robot_forward_turn_enkoder(1, en_speed, 100, true);
+            break;
+        case MOVE_LINE_3_FORWARD_LEFT_TURN:
+            driver_motor_forward_left(100,20);
+            break;
+        case MOVE_LINE_3_FORWARD_RIGHT_TURN:
+            driver_motor_forward_left(100,20);
+            break;
+        
         default:
             break;
         }

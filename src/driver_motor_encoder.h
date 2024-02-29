@@ -1,9 +1,13 @@
 #ifndef __DRIVER_MOTOR_ENCIDER_H__
 #define __DRIVER_MOTOR_ENCIDER_H__
 
+#define DRIVER_MOTOR_FORVERD 1
+#define DRIVER_MOTOR_BACK 0
+
 #include "pico/stdlib.h"
 #include "motor_robot.h"
 #include "enkoder.h"
+
 
 
 /// @brief init

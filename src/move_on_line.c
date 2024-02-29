@@ -47,11 +47,11 @@ void move_line_core(void) {
             // motor_robot_stop();
             break;
         case MOVE_LINE_3_FORWARD_LEFT:
-            driver_motor_forward_left(30,20);
+            driver_motor_forward_left(50,20);
             // motor_robot_forward_turn_enkoder(-1, en_speed, 100, true);
             break;
         case MOVE_LINE_3_FORWARD_RIGHT:
-            driver_motor_forward_right(30,20);
+            driver_motor_forward_right(50,20);
             // motor_robot_forward_turn_enkoder(1, en_speed, 100, true);
             break;
         case MOVE_LINE_3_FORWARD:
@@ -59,10 +59,10 @@ void move_line_core(void) {
             // motor_robot_forward_turn_enkoder(1, en_speed, 100, true);
             break;
         case MOVE_LINE_3_FORWARD_LEFT_TURN:
-            driver_motor_forward_left(100,20);
+            driver_motor_forward_left_turn(100,20);
             break;
         case MOVE_LINE_3_FORWARD_RIGHT_TURN:
-            driver_motor_forward_left(100,20);
+            driver_motor_forward_left_turn(100,20);
             break;
         
         default:

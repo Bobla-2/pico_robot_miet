@@ -37,17 +37,20 @@ void driver_motor_6612_robot_init(motor_dc_pwm_6612_t* motor_robot){
     pwm_set_wrap(slice_num, 10000);
     pwm_clear_irq(slice_num);
     motor_dr_slise_rec = slice_num;
-    wm_set_irq_enabled(slice_num, true);
+    pwm_set_irq_enabled(slice_num, true);
     irq_set_exclusive_handler(PWM_IRQ_WRAP, on_pwm_driver);
     irq_set_enabled(PWM_IRQ_WRAP, true);
 }
 
 
-void driver_6612_motor_move(uint speed_R, uint speed_L){
-    gpio_put(en_dr_motor->gpio_Lin1, false);
-    gpio_put(en_dr_motor->gpio_Lin2, true);
-    gpio_put(en_dr_motor->gpio_Rin1, true);
-    gpio_put(en_dr_motor->gpio_Rin2, false);
+void driver_6612_motor_move(uint speed_R, uint speed_L, int DIR_R, int DIR_L){
+    gpio_put(en_dr_motor->gpio_Lin1, !(bool)DIR_L);
+    gpio_put(en_dr_motor->gpio_Lin2, (bool)DIR_L);
+    
+    gpio_put(en_dr_motor->gpio_Rin1, (bool)DIR_R);
+    gpio_put(en_dr_motor->gpio_Rin2, !(bool)DIR_R);
+
+
     gpio_put(en_dr_motor->gpio_stby, true);
     
     uint slice_num = pwm_gpio_to_slice_num(en_dr_motor->gpio_Rpwm);
@@ -66,22 +69,30 @@ void driver_motor_init(motor_dc_pwm_6612_t* motor_conf, enkoder_t* enkoder_R, en
 }
 
 void driver_motor_forward(uint speed){
-    driver_6612_motor_move(speed, speed);
+    driver_6612_motor_move(speed, speed, DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_FORVERD);
 }
 
 void driver_motor_forward_left(uint level, uint speed){
     uint temp_level = speed - (level *speed / 100);
-    driver_6612_motor_move(speed, temp_level);
-    
-    
+    driver_6612_motor_move(speed, temp_level, DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_FORVERD);
 
+}
+
+void driver_motor_forward_left_turn(uint level, uint speed){
+    // uint temp_level = speed - (level *speed / 100);
+    driver_6612_motor_move(speed, speed, DRIVER_MOTOR_BACK, DRIVER_MOTOR_FORVERD);
 }
 void driver_motor_forward_right(uint level, uint speed){
     uint temp_level = speed - (level *speed / 100);
-    driver_6612_motor_move(temp_level, speed);
-
+    driver_6612_motor_move(temp_level, speed, DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_FORVERD);
 }
+
+void driver_motor_forward_right_turn(uint level, uint speed){
+    // uint temp_level = speed - (level *speed / 100);
+    driver_6612_motor_move(speed, speed, DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_BACK);
+}
+
 void driver_motor_stop(){
-    driver_6612_motor_move(0,0);
+    driver_6612_motor_move(0,0 , DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_FORVERD);
 
 }

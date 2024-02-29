@@ -45,9 +45,7 @@ typedef struct {
     uint16_t speed;
     uint16_t speed_req;
     motor_direct_6612_t direct;
-    // uint ID;
-    motor_robot_status_t status_dc;
-      
+    motor_robot_status_t status_dc; 
 }motor_dc_pwm_6612_t;
 
 
@@ -57,8 +55,26 @@ void motor_6612_robot_turn_spot(motor_dc_pwm_6612_t* motor_robot, uint DIR);
 void motor_6612_robot_turn(motor_dc_pwm_6612_t* motor_robot, uint DIR);
 void motor_6612_robot_back(motor_dc_pwm_6612_t* motor_robot);
 void motor_6612_robot_stop(motor_dc_pwm_6612_t* motor_robot);
-void motor_6612_robot_forward_encoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L, uint len, uint speed);
-void motor_6612_robot_forward_turn_enkoder(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L, int engle, uint speed, int radius);
 
+/// @brief forward movement function
+/// @param len movement
+/// @param speed movement
+void motor_robot_forward_encoder(uint len, uint speed);
+
+/// @brief circular movement function
+/// @param engle turning circle
+/// @param speed movement robot
+/// @param radius turning circle
+/// @param infinity_enable enable infinity move
+void motor_robot_forward_turn_enkoder(int engle, uint speed, int radius, bool infinity_enable);
+
+/// @brief fun init driver motor and encoder
+/// @param motor_robot struct 
+/// @param enkoder_R struct
+/// @param enkoder_L struct
+void motor_robot_init(motor_dc_pwm_6612_t* motor_robot, enkoder_t* enkoder_R, enkoder_t* enkoder_L);
+
+/// @brief turn off all motors
+void motor_robot_stop(void);
 
 #endif

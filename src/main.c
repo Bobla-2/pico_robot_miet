@@ -7,6 +7,7 @@
 #include "hardware/watchdog.h"
 // #include <stdio.h>
 #include "move_on_line.h"
+#include "driver_motor_encoder.h"
 
 
 //-------------------init strukt for modul---------------------//
@@ -47,11 +48,11 @@ void main_init(){
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
     if (watchdog_caused_reboot()) printf("Rebooted by Watchdog!\n");
     watchdog_enable(100, 1);
-
-    motor_6612_robot_init(&motor_robot_6612);
-    enkoder_init(&enkoder_L, &enkoder_R);
+    // motor_robot_init(&motor_robot_6612, &enkoder_R, &enkoder_L);
+    driver_motor_init(&motor_robot_6612, &enkoder_R, &enkoder_L);
+    enkoder_init_old(&enkoder_L, &enkoder_R);
     sensor_init(&sensor);
-    move_line_init(&sensor, &motor_robot_6612)
+    move_line_init(&sensor);
 }
 
  //-------------------main cycle---------------------//
@@ -65,22 +66,22 @@ int main() {
         static uint32_t time_old_stamp;
 
         time_stamp = time_us_32(); //  125.000 ≈ 1mc
-        if  (time_stamp - time_old_stamp > 5000){ // 5000
+        if  (time_stamp - time_old_stamp > 1000){ // 5000
             watchdog_update();
            
 
             ///// user code begin //////------------------------------------
-
+            enkoder_read();
 
              
-            if (motor_robot_6612.status_dc == STOP_){
-                engle_temp = engle_temp * -1;
-            }
-            motor_6612_robot_forward_turn_enkoder(&motor_robot_6612, &enkoder_R, &enkoder_L, engle_temp, 50, 30);
+            // if (motor_robot_6612.status_dc == STOP_){
+            //     engle_temp = engle_temp * -1;
+            // }
+            // //motor_robot_forward_turn_enkoder(engle_temp, 50, 30, false);
+                
 
 
-
-
+            move_line_core();
 
             
 
@@ -88,7 +89,7 @@ int main() {
             ////// user code  end //////----------------------------------
 
             // printf("R:%d, L:%d||| LmK:%d, RmK:%d \r\n ", enkoder_R.count, enkoder_L.count, motor_robot_6612.k_L, motor_robot_6612.k_R);
-            // printf("adc =%hu//%hu//%hu\r\n",sensor.state_a[0], sensor.state_a[1], sensor.state_a[2]);
+            printf("adc =%d//%d//%d\r\n",sensor.state_a[0], sensor.state_a[1], sensor.state_a[2]);
             time_old_stamp = time_stamp;
            
         }

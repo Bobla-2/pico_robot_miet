@@ -25,6 +25,7 @@ target_sources(test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/sensor.c
                 # ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_dc_pwm.c)
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/enkoder.c
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_robot.c
+                ${CMAKE_CURRENT_SOURCE_DIR}/src/driver_motor_encoder.c
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/move_on_line.c)
 
 # pico_enable_stdio_usb(test 1)

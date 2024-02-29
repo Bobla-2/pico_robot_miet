@@ -25,10 +25,10 @@ void sensor_init(sensor_t* sensor_mas){
     } else {
         adc_init();
         
-        uint16_t temp;
+        uint temp_sen_mask;
         for (uint i = 0; i < sensor_mas->len; i++){
             adc_gpio_init(26 + i);
-            temp |= (1 << i);
+            temp_sen_mask |= (1 << i);
         }
             
         adc_fifo_setup(
@@ -36,16 +36,16 @@ void sensor_init(sensor_t* sensor_mas){
             false,
             sensor_mas->len,
             false,
-            true
+            false
         );
         if (irq_has_shared_handler(ADC_IRQ_FIFO)){
-           irq_add_shared_handler(ADC_IRQ_FIFO, on_adc_wrap, PICO_SHARED_IRQ_HANDLER_DEFAULT_ORDER_PRIORITY );
+           irq_add_shared_handler(ADC_IRQ_FIFO, &on_adc_wrap, PICO_SHARED_IRQ_HANDLER_DEFAULT_ORDER_PRIORITY );
         }else{
-            irq_set_exclusive_handler(ADC_IRQ_FIFO, on_adc_wrap);
+            irq_set_exclusive_handler(ADC_IRQ_FIFO, &on_adc_wrap);
         }
         irq_set_priority (ADC_IRQ_FIFO, PICO_HIGHEST_IRQ_PRIORITY);
         irq_set_enabled(ADC_IRQ_FIFO, true);
-        adc_set_round_robin(temp);
+        adc_set_round_robin((uint)temp_sen_mask);
         adc_irq_set_enabled(true);
         adc_set_clkdiv(1000);
         adc_fifo_drain();

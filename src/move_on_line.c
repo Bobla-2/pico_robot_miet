@@ -1,63 +1,92 @@
-#include "move_in_line.h"
+#include "move_on_line.h"
 #include "pico/stdlib.h"
 #include "motor_robot.h"
 #include "enkoder.h"
 #include "sensor.h"
+#include "driver_motor_encoder.h"
 
-motor_dc_pwm_6612_t *en_motor;
 sensor_t *en_sensor_line;
 bool invers_senser;
+uint en_speed;
+uint16_t sens_level;
 
-
-void move_line_init(sensor_t *sensor_line, motor_dc_pwm_6612_t *motor) { 
-    en_motor = motor;
-    en_sensor_lone = sensor_line;
+void move_line_init(sensor_t *sensor_line) { 
+    en_sensor_line = sensor_line;
+    en_speed = 20;
+    sens_level = 1700;
 }
 
 void move_line_deinit(void) { 
-    en_motor = NONE;
-    en_sensor_line = NONE;
+    en_sensor_line = NULL;
 }
 
-void move_line_deinit(bool ) { 
-    en_motor = NONE;
-    en_sensor_line = NONE;
-}
-uint move_line_hangler_sensor (void);
+void move_line_hangler_sensor (uint *buf_state);
 
 void move_line_core(void) {
-    switch (move_line_hangler_sensor())
-    {
-    case MOVE_FORWARD:
-        /* code */
-        break;
+    uint buf_state;
+    //printf("line111 =%d/\r\n",buf_state);
+
+    // move_line_hangler_sensor(&buf_state);
+    //printf("line222 =%d/\r\n",buf_state);
+    //if (en_sensor_line->len == 3){
+        uint temp;
+        printf("line111 =%d/\r\n",buf_state);
+        for (uint i = 0; i < en_sensor_line->len; i++){
+            temp = (en_sensor_line->state_a[i] > sens_level) ? 1 : 0;
+            buf_state |= (temp << i);
+            printf("line55 =%d/\r\n",buf_state);
+            // *buf_state = 1;
+        }
+
+
+
+
+        switch (buf_state){
+        case MOVE_LINE_3_STOP:
+        driver_motor_stop();
+            // motor_robot_stop();
+            break;
+        case MOVE_LINE_3_FORWARD_LEFT:
+            driver_motor_forward_left(50,20);
+            // motor_robot_forward_turn_enkoder(-1, en_speed, 100, true);
+            break;
+        case MOVE_LINE_3_FORWARD_RIGHT:
+            driver_motor_forward_right(50,20);
+            // motor_robot_forward_turn_enkoder(1, en_speed, 100, true);
+            break;
+        case MOVE_LINE_3_FORWARD:
+            driver_motor_forward(20);
+            // motor_robot_forward_turn_enkoder(1, en_speed, 100, true);
+            break;
+        case MOVE_LINE_3_FORWARD_LEFT_TURN:
+            driver_motor_forward_left_turn(100,20);
+            break;
+        case MOVE_LINE_3_FORWARD_RIGHT_TURN:
+            driver_motor_forward_left_turn(100,20);
+            break;
+        
+        default:
+            break;
+        }
+        
     
-    default MOVE_STOP:
-        break;
-    }
-
-        
+    // } else {
+    //     // print("error: MOVE_LINE en_sensor_line->len");
+    // }
 }
 
-uint move_line_hangler_sensor (void){
-    bool buf_state[en_sensor_line->len];
+void move_line_hangler_sensor (uint *buf_state){
     if (en_sensor_line->mode == ANALOG_sensor){
-        
-        // for (int i = 0; i < en_sensor_line->len; i++){
-
-        //     en_sensor_line->state_a[i]
-        // }
-        if (en_sensor_line->state_a[1] > en_sensor_line->state_a[0] && en_sensor_line->state_a[1] > en_sensor_line->state_a[2]){
-            if (en_sensor_line->state_a[0] > en_sensor_line->state_a[2]){
-                motor_6612_robot_forward_turn_enkoder(en_motor, )
+        uint temp;
+        printf("line111 =%d/\r\n",*buf_state);
+        for (uint i = 0; i < en_sensor_line->len; i++){
+            printf("line55 =%d/\r\n",*buf_state);
+            temp = (en_sensor_line->state_a[i] < sens_level) ? 1 : 0;
+            *buf_state |= (temp << i);
+            // *buf_state = 1;
         }
-
     } else {
-        for (uint32_t i = 0; i < en_sensor_line->len; i++){
-            buf_state[i] = en_sensor_line->state_d & (1 << i);
-        }
+        *buf_state = en_sensor_line->state_d;
     }
-
-
-
 }
+

@@ -10,7 +10,7 @@ typedef enum {
 typedef struct {
     uint* gpio;
     uint16_t len;
-    uint32_t state_d;
+    uint state_d;
     uint16_t* state_a;   
     sensor_mode_t mode;
 } sensor_t;

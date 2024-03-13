@@ -19,6 +19,9 @@ void driver_motor_forward(uint speed);
 
 void driver_motor_forward_left(uint level, uint speed);
 void driver_motor_forward_right(uint level, uint speed);
+void driver_motor_forward_right_turn(uint level, uint speed);
+void driver_motor_forward_left_turn(uint level, uint speed);
 void driver_motor_stop();
+void stoooop();
 
 #endif

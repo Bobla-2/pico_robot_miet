@@ -30,7 +30,8 @@ motor_dc_pwm_6612_t  motor_robot_6612 = {
     .gpio_Lpwm = 10,
     .gpio_Rpwm = 11,
     .gpio_stby = 12, 
-    .k2_R = 1,    
+    .k2_R = 1,   
+    .flag_stop = 0,
 };
 
 enkoder_t enkoder_L = {
@@ -81,7 +82,12 @@ int main() {
                 
 
 
-            move_line_core();
+            if (motor_robot_6612.flag_stop > 60){
+                stoooop();
+            } else {
+                move_line_core();
+            }
+            printf("sdfsfs =%d//\r\n",motor_robot_6612.flag_stop);
 
             
 
@@ -89,7 +95,7 @@ int main() {
             ////// user code  end //////----------------------------------
 
             // printf("R:%d, L:%d||| LmK:%d, RmK:%d \r\n ", enkoder_R.count, enkoder_L.count, motor_robot_6612.k_L, motor_robot_6612.k_R);
-            printf("adc =%d//%d//%d\r\n",sensor.state_a[0], sensor.state_a[1], sensor.state_a[2]);
+            //printf("adc =%d//%d//%d\r\n",sensor.state_a[0], sensor.state_a[1], sensor.state_a[2]);
             time_old_stamp = time_stamp;
            
         }

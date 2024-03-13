@@ -21,6 +21,9 @@ void move_line_deinit(void) {
 }
 
 void move_line_hangler_sensor (uint *buf_state);
+// void stooooooooppp(){
+//     stoooop();
+// }
 
 void move_line_core(void) {
     uint buf_state;
@@ -59,7 +62,7 @@ void move_line_core(void) {
             // motor_robot_forward_turn_enkoder(1, en_speed, 100, true);
             break;
         case MOVE_LINE_3_FORWARD_LEFT_TURN:
-            driver_motor_forward_left_turn(100,20);
+            driver_motor_forward_right_turn(100,20);
             break;
         case MOVE_LINE_3_FORWARD_RIGHT_TURN:
             driver_motor_forward_left_turn(100,20);

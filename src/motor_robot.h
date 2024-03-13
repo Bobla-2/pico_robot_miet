@@ -46,6 +46,7 @@ typedef struct {
     uint16_t speed_req;
     motor_direct_6612_t direct;
     motor_robot_status_t status_dc; 
+    uint32_t flag_stop;
 }motor_dc_pwm_6612_t;
 
 

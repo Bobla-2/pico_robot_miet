@@ -203,6 +203,7 @@ void motor_robot_forward_turn_enkoder(int engle, uint speed, int radius, bool in
     static uint speed_control = 1700;
     const float half_width = 5.7f;
     static float delta_K;
+    motor_robot_forward_turn_enkoder();
     
     static int enkoder_count_delta;
 

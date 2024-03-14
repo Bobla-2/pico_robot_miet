@@ -1,13 +1,13 @@
-#include "sensor.h"
+#include "Bobla_sensor_line_lib.h"
 // #include "motor_dc_pwm.h"
-#include "motor_robot.h"
-#include "enkoder.h"
+// #include "motor_robot.h"
+#include "Bobla_encoder_lib.h"
 #include "hardware/adc.h"
 #include "hardware/gpio.h"
 #include "hardware/watchdog.h"
-// #include <stdio.h>
 #include "move_on_line.h"
 #include "driver_motor_encoder.h"
+#include "Bobla_6612_motor_lib.h"
 
 
 //-------------------init strukt for modul---------------------//
@@ -30,7 +30,8 @@ motor_dc_pwm_6612_t  motor_robot_6612 = {
     .gpio_Lpwm = 10,
     .gpio_Rpwm = 11,
     .gpio_stby = 12, 
-    .k2_R = 1,    
+    .k2_R = 1,   
+    .flag_stop = 0,
 };
 
 enkoder_t enkoder_L = {
@@ -50,9 +51,11 @@ void main_init(){
     watchdog_enable(100, 1);
     // motor_robot_init(&motor_robot_6612, &enkoder_R, &enkoder_L);
     driver_motor_init(&motor_robot_6612, &enkoder_R, &enkoder_L);
-    enkoder_init_old(&enkoder_L, &enkoder_R);
+    enkoder_init_NO_irq(&enkoder_L, &enkoder_R);
     sensor_init(&sensor);
     move_line_init(&sensor);
+    gpio_init(24);
+    gpio_set_dir(24, GPIO_OUT);
 }
 
  //-------------------main cycle---------------------//
@@ -65,13 +68,16 @@ int main() {
         static uint32_t time_stamp;
         static uint32_t time_old_stamp;
 
-        time_stamp = time_us_32(); //  125.000 ≈ 1mc
-        if  (time_stamp - time_old_stamp > 1000){ // 5000
+        time_stamp = time_us_32(); 
+        if  (time_stamp - time_old_stamp > 5000){ // 5000
+        gpio_put(24, true);
             watchdog_update();
-           
+          
+          
 
-            ///// user code begin //////------------------------------------
-            enkoder_read();
+
+            /////--------------------------------- user code begin ---------------------------------//////
+            enkoder_core_no_irq();
 
              
             // if (motor_robot_6612.status_dc == STOP_){
@@ -81,17 +87,22 @@ int main() {
                 
 
 
-            move_line_core();
+            // if (motor_robot_6612.flag_stop > 60){
+            //    // stoooop();
+            // } else {
+            // }
+                move_line_core();
+            // printf("sdfsfs =%d//\r\n",motor_robot_6612.flag_stop);
+            // printf("
 
-            
 
 
-            ////// user code  end //////----------------------------------
+            //////---------------------------------- user code  end ----------------------------------//////
 
             // printf("R:%d, L:%d||| LmK:%d, RmK:%d \r\n ", enkoder_R.count, enkoder_L.count, motor_robot_6612.k_L, motor_robot_6612.k_R);
             printf("adc =%d//%d//%d\r\n",sensor.state_a[0], sensor.state_a[1], sensor.state_a[2]);
             time_old_stamp = time_stamp;
-           
+           gpio_put(24, false);
         }
     }
 }

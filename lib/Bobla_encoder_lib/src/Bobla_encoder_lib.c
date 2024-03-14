@@ -1,6 +1,4 @@
-// #include <stdint.h>
-#include "enkoder.h"
-// #include <stdio.h>
+#include "Bobla_encoder_lib.h"
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
 #include "hardware/irq.h"
@@ -13,14 +11,14 @@ void gpio_callback(uint gpio, uint32_t events){
     
     
 }
-void enkoder_init(enkoder_t* enkoder_L, enkoder_t* enkoder_R){
+void enkoder_init_with_irq(enkoder_t* enkoder_L, enkoder_t* enkoder_R){
     gpio_set_irq_enabled_with_callback(enkoder_L->gpio, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
     gpio_set_irq_enabled_with_callback(enkoder_R->gpio, GPIO_IRQ_EDGE_RISE | GPIO_IRQ_EDGE_FALL, true, &gpio_callback);
     enkoder_mas[0] = enkoder_L;
     enkoder_mas[1] = enkoder_R;
 }
 
-void enkoder_init_old(enkoder_t* enkoder_L, enkoder_t* enkoder_R){
+void enkoder_init_NO_irq(enkoder_t* enkoder_L, enkoder_t* enkoder_R){
     gpio_init(enkoder_L->gpio);
     gpio_init(enkoder_R->gpio);
     gpio_set_dir(enkoder_R->gpio, false);
@@ -31,7 +29,7 @@ void enkoder_init_old(enkoder_t* enkoder_L, enkoder_t* enkoder_R){
     enkoder_mas[1] = enkoder_R;
 }
 
-void enkoder_read(){
+void enkoder_core_no_irq(){
     static bool temp_state;
     for(int i = 0; i < 2; i++){
         temp_state = gpio_get(enkoder_mas[i]->gpio);

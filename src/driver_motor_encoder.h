@@ -5,8 +5,9 @@
 #define DRIVER_MOTOR_BACK 0
 
 #include "pico/stdlib.h"
-#include "motor_robot.h"
-#include "enkoder.h"
+// #include "motor_robot.h"
+#include "Bobla_encoder_lib.h"
+#include "Bobla_6612_motor_lib.h"
 
 
 
@@ -19,6 +20,9 @@ void driver_motor_forward(uint speed);
 
 void driver_motor_forward_left(uint level, uint speed);
 void driver_motor_forward_right(uint level, uint speed);
+void driver_motor_forward_right_turn(uint level, uint speed);
+void driver_motor_forward_left_turn(uint level, uint speed);
 void driver_motor_stop();
+void stoooop();
 
 #endif

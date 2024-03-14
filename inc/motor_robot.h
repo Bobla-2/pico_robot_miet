@@ -3,7 +3,7 @@
 
 // #include "motor_dc_pwm.h"
 #include "pico/stdlib.h"
-#include "enkoder.h"
+#include "Bobla_encoder_lib.h"
 #define ROBOT_CCW 0
 #define ROBOT_CW 1
 typedef enum {

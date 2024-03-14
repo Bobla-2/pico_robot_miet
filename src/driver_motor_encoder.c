@@ -2,7 +2,7 @@
 #include "pico/time.h"
 #include "hardware/irq.h"
 #include "hardware/pwm.h"
-#include "enkoder.h"
+#include "Bobla_encoder_lib.h"
 
 motor_dc_pwm_6612_t* en_dr_motor;
 enkoder_t* en_dr_encoder_r;

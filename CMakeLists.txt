@@ -1,5 +1,20 @@
 cmake_minimum_required(VERSION 3.12)
 
+# Устанавливаем рабочий каталог для выполнения команды
+set(MY_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+# Определение переменной для пути к папке build
+set(BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/build")
+
+# Функция для очистки папки build
+function(clear_build_dir)
+    message("Clearing build directory: ${BUILD_DIR}")
+    file(REMOVE_RECURSE "${BUILD_DIR}")
+endfunction()
+
+# Вызываем функцию очистки при вызове cmake
+clear_build_dir()
+
 include(pico_sdk_import.cmake)
 project(test C CXX ASM)
 set(CMAKE_C_STANDARD 11)
@@ -11,13 +26,15 @@ add_compile_options(-Wall
         -Wno-unused-function # we have some for the docs that aren't called
         )
      
-set(SOURCE_EXE src/main.c)
+# set(SOURCE_EXE src/main.c)
 
-add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_EXE})
+add_executable(${CMAKE_PROJECT_NAME} src/main.c)
+
+add_subdirectory(lib/Bobla_encoder_lib)
 
 target_sources(${CMAKE_PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/sensor.c
                 # ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_dc_pwm.c)
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/enkoder.c
+                # ${CMAKE_CURRENT_SOURCE_DIR}/src/enkoder.c
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_robot.c
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/driver_motor_encoder.c
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/move_on_line.c)
@@ -26,7 +43,6 @@ target_sources(${CMAKE_PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/sens
 
 include_directories(inc)
 
-add_subdirectory(lib/test_lib1)
 
 
 target_link_libraries(${CMAKE_PROJECT_NAME} 
@@ -35,6 +51,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                     hardware_irq
                     hardware_adc 
                     hardware_watchdog
+                    Bobla_encoder_lib
                     )
 
 # pico_enable_stdio_usb(${CMAKE_PROJECT_NAME} 1)

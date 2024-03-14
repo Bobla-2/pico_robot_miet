@@ -1,7 +1,7 @@
 #include "sensor.h"
 // #include "motor_dc_pwm.h"
 #include "motor_robot.h"
-#include "enkoder.h"
+#include "Bobla_encoder_lib.h"
 #include "hardware/adc.h"
 #include "hardware/gpio.h"
 #include "hardware/watchdog.h"
@@ -50,7 +50,7 @@ void main_init(){
     watchdog_enable(100, 1);
     // motor_robot_init(&motor_robot_6612, &enkoder_R, &enkoder_L);
     driver_motor_init(&motor_robot_6612, &enkoder_R, &enkoder_L);
-    enkoder_init_old(&enkoder_L, &enkoder_R);
+    enkoder_init_NO_irq(&enkoder_L, &enkoder_R);
     sensor_init(&sensor);
     move_line_init(&sensor);
     gpio_init(24);
@@ -71,10 +71,12 @@ int main() {
         if  (time_stamp - time_old_stamp > 5000){ // 5000
         gpio_put(24, true);
             watchdog_update();
-           
+          
+          
+
 
             /////--------------------------------- user code begin ---------------------------------//////
-            enkoder_read();
+            enkoder_core_no_irq();
 
              
             // if (motor_robot_6612.status_dc == STOP_){
@@ -92,7 +94,6 @@ int main() {
             // printf("sdfsfs =%d//\r\n",motor_robot_6612.flag_stop);
             // printf("
 
-            
 
 
             //////---------------------------------- user code  end ----------------------------------//////

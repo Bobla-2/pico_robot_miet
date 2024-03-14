@@ -2,7 +2,7 @@
 #define __MOVE_ON_LINE_H__
 
 #include "pico/stdlib.h"
-#include "sensor.h"
+#include "Bobla_sensor_line_lib.h"
 #include "motor_robot.h"
 
 enum move_line_t {

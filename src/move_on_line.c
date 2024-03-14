@@ -2,7 +2,7 @@
 #include "pico/stdlib.h"
 #include "motor_robot.h"
 #include "Bobla_encoder_lib.h"
-#include "sensor.h"
+#include "Bobla_sensor_line_lib.h"
 #include "driver_motor_encoder.h"
 
 sensor_t *en_sensor_line;

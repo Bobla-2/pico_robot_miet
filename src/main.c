@@ -5,7 +5,6 @@
 #include "hardware/adc.h"
 #include "hardware/gpio.h"
 #include "hardware/watchdog.h"
-// #include <stdio.h>
 #include "move_on_line.h"
 #include "driver_motor_encoder.h"
 

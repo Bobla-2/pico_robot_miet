@@ -20,11 +20,6 @@ void move_line_deinit(void) {
     en_sensor_line = NULL;
 }
 
-// void move_line_hangler_sensor (uint *buf_state);
-// void stooooooooppp(){
-//     stoooop();
-// }
-
 void move_line_core(void) {
     uint buf_state = 0;
     // printf("line11----------- =%zu/\r\n",buf_state);

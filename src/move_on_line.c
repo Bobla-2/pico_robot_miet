@@ -27,13 +27,14 @@ void move_line_hangler_sensor (uint *buf_state);
 
 void move_line_core(void) {
     uint buf_state;
+    printf("line11----------- =%zu/\r\n",buf_state);
     //printf("line111 =%d/\r\n",buf_state);
 
     // move_line_hangler_sensor(&buf_state);
     //printf("line222 =%d/\r\n",buf_state);
     //if (en_sensor_line->len == 3){
         uint temp;
-        printf("line111 =%d/\r\n",buf_state);
+        // printf("line111 =%d/\r\n",buf_state);
         for (uint i = 0; i < en_sensor_line->len; i++){
             temp = (en_sensor_line->state_a[i] > sens_level) ? 1 : 0;
             buf_state |= (temp << i);
@@ -43,7 +44,8 @@ void move_line_core(void) {
 
 
 
-
+        
+        printf("line55----------- =%zu/\r\n",buf_state);
         switch (buf_state){
         case MOVE_LINE_3_STOP:
         driver_motor_stop();
@@ -81,9 +83,9 @@ void move_line_core(void) {
 void move_line_hangler_sensor (uint *buf_state){
     if (en_sensor_line->mode == ANALOG_sensor){
         uint temp;
-        printf("line111 =%d/\r\n",*buf_state);
+        // printf("line111 =%d/\r\n",*buf_state);
         for (uint i = 0; i < en_sensor_line->len; i++){
-            printf("line55 =%d/\r\n",*buf_state);
+            // printf("line55 =%d/\r\n",*buf_state);
             temp = (en_sensor_line->state_a[i] < sens_level) ? 1 : 0;
             *buf_state |= (temp << i);
             // *buf_state = 1;

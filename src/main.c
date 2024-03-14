@@ -54,6 +54,8 @@ void main_init(){
     enkoder_init_old(&enkoder_L, &enkoder_R);
     sensor_init(&sensor);
     move_line_init(&sensor);
+    gpio_init(24);
+    gpio_set_dir(24, GPIO_OUT);
 }
 
  //-------------------main cycle---------------------//
@@ -66,12 +68,13 @@ int main() {
         static uint32_t time_stamp;
         static uint32_t time_old_stamp;
 
-        time_stamp = time_us_32(); //  125.000 ≈ 1mc
-        if  (time_stamp - time_old_stamp > 1000){ // 5000
+        time_stamp = time_us_32(); 
+        if  (time_stamp - time_old_stamp > 5000){ // 5000
+        gpio_put(24, true);
             watchdog_update();
            
 
-            ///// user code begin //////------------------------------------
+            /////--------------------------------- user code begin ---------------------------------//////
             enkoder_read();
 
              
@@ -82,22 +85,23 @@ int main() {
                 
 
 
-            if (motor_robot_6612.flag_stop > 60){
-                stoooop();
-            } else {
+            // if (motor_robot_6612.flag_stop > 60){
+            //    // stoooop();
+            // } else {
+            // }
                 move_line_core();
-            }
-            printf("sdfsfs =%d//\r\n",motor_robot_6612.flag_stop);
+            // printf("sdfsfs =%d//\r\n",motor_robot_6612.flag_stop);
+            // printf("
 
             
 
 
-            ////// user code  end //////----------------------------------
+            //////---------------------------------- user code  end ----------------------------------//////
 
             // printf("R:%d, L:%d||| LmK:%d, RmK:%d \r\n ", enkoder_R.count, enkoder_L.count, motor_robot_6612.k_L, motor_robot_6612.k_R);
-            //printf("adc =%d//%d//%d\r\n",sensor.state_a[0], sensor.state_a[1], sensor.state_a[2]);
+            printf("adc =%d//%d//%d\r\n",sensor.state_a[0], sensor.state_a[1], sensor.state_a[2]);
             time_old_stamp = time_stamp;
-           
+           gpio_put(24, false);
         }
     }
 }

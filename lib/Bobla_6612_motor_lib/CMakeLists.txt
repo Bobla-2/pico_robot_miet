@@ -13,7 +13,8 @@ target_sources(${NAME_LIB} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src/${NAME_SOURCES_C
 target_include_directories(${NAME_LIB} INTERFACE ${CMAKE_CURRENT_LIST_DIR}/inc)
 target_link_libraries(${NAME_LIB} INTERFACE pico_stdlib
 		hardware_gpio
-		hardware_pwm)
+		hardware_pwm
+		hardware_irq)
 
 # Register other modules
 

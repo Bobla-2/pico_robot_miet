@@ -1,12 +1,13 @@
 #include "Bobla_sensor_line_lib.h"
 // #include "motor_dc_pwm.h"
-#include "motor_robot.h"
+// #include "motor_robot.h"
 #include "Bobla_encoder_lib.h"
 #include "hardware/adc.h"
 #include "hardware/gpio.h"
 #include "hardware/watchdog.h"
 #include "move_on_line.h"
 #include "driver_motor_encoder.h"
+#include "Bobla_6612_motor_lib.h"
 
 
 //-------------------init strukt for modul---------------------//

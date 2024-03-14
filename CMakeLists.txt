@@ -1,19 +1,19 @@
 cmake_minimum_required(VERSION 3.12)
 
 # Устанавливаем рабочий каталог для выполнения команды
-set(MY_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+# set(MY_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-# Определение переменной для пути к папке build
-set(BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/build")
+# # Определение переменной для пути к папке build
+# set(BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/build")
 
-# Функция для очистки папки build
-function(clear_build_dir)
-    message("Clearing build directory: ${BUILD_DIR}")
-    file(REMOVE_RECURSE "${BUILD_DIR}")
-endfunction()
+# # Функция для очистки папки build
+# function(clear_build_dir)
+#     message("Clearing build directory: ${BUILD_DIR}")
+#     file(REMOVE_RECURSE "${BUILD_DIR}")
+# endfunction()
 
-# Вызываем функцию очистки при вызове cmake
-clear_build_dir()
+# # Вызываем функцию очистки при вызове cmake
+# clear_build_dir()
 
 include(pico_sdk_import.cmake)
 project(test C CXX ASM)
@@ -30,31 +30,33 @@ add_compile_options(-Wall
 
 add_executable(${CMAKE_PROJECT_NAME} src/main.c)
 
+add_subdirectory(lib/Bobla_6612_motor_lib)
 add_subdirectory(lib/Bobla_encoder_lib)
 add_subdirectory(lib/Bobla_sensor_line_lib)
 
 target_sources(${CMAKE_PROJECT_NAME} PUBLIC #${CMAKE_CURRENT_SOURCE_DIR}/src/sensor.c
                 # ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_dc_pwm.c)
                 # ${CMAKE_CURRENT_SOURCE_DIR}/src/enkoder.c
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_robot.c
+                # ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_robot.c
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/driver_motor_encoder.c
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/move_on_line.c)
 
 
 
+target_link_libraries(${CMAKE_PROJECT_NAME} 
+                pico_stdlib
+                hardware_pwm
+                hardware_irq
+                hardware_adc 
+                hardware_watchdog
+                Bobla_encoder_lib
+                Bobla_sensor_line_lib
+                Bobla_6612_motor_lib
+                )
+                
 include_directories(inc)
 
 
-
-target_link_libraries(${CMAKE_PROJECT_NAME} 
-                    pico_stdlib
-                    hardware_pwm
-                    hardware_irq
-                    hardware_adc 
-                    hardware_watchdog
-                    Bobla_encoder_lib
-                    Bobla_sensor_line_lib
-                    )
 
 # pico_enable_stdio_usb(${CMAKE_PROJECT_NAME} 1)
 # pico_enable_stdio_uart(${CMAKE_PROJECT_NAME} 0)

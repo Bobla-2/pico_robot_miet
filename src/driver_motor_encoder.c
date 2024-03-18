@@ -17,6 +17,7 @@ void driver_motor_init(motor_dc_pwm_6612_t* motor_conf, enkoder_t* enkoder_R, en
     en_dr_encoder_r = enkoder_R;
 }
 
+
 void driver_motor_forward(uint speed){
     en_dr_motor->flag_stop = 0;
     printf("driver_motor_forward\r\n");
@@ -54,5 +55,5 @@ void driver_motor_stop(){
 
 }
 void stoooop(){
-    driver_6612_motor_move(0,0 , DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_FORVERD);
+    driver_6612_motor_move(0, 0, DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_FORVERD);
 }

@@ -2,6 +2,7 @@
 #include "pico/stdlib.h"
 #include "hardware/gpio.h"
 #include "hardware/irq.h"
+// #include "hardware/time.h"
 
 enkoder_t* enkoder_mas[2];
 
@@ -29,6 +30,16 @@ void enkoder_init_NO_irq(enkoder_t* enkoder_L, enkoder_t* enkoder_R){
     enkoder_mas[1] = enkoder_R;
 }
 
+void set_rpm(int num_encoder){
+    uint32_t time_stamp;
+    time_stamp = time_us_32(); 
+
+    if  (time_stamp - enkoder_mas[num_encoder]->time_old_stamp > 200000){ 
+        
+    }
+
+}
+
 void enkoder_core_no_irq(){
     static bool temp_state;
     for(int i = 0; i < 2; i++){
@@ -36,6 +47,7 @@ void enkoder_core_no_irq(){
         if (temp_state && !enkoder_mas[i]->state){
             enkoder_mas[i]->state = true;
             enkoder_mas[i]->count += 1;
+            set_rpm(i);
         } else if (!temp_state && enkoder_mas[i]->state){
             enkoder_mas[i]->state = false;
             enkoder_mas[i]->count += 1;

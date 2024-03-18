@@ -1,19 +1,8 @@
 cmake_minimum_required(VERSION 3.12)
 
-# Устанавливаем рабочий каталог для выполнения команды
-# set(MY_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
-# # Определение переменной для пути к папке build
-# set(BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/build")
+file(REMOVE_RECURSE ${CMAKE_CURRENT_BINARY_DIR}/build)
 
-# # Функция для очистки папки build
-# function(clear_build_dir)
-#     message("Clearing build directory: ${BUILD_DIR}")
-#     file(REMOVE_RECURSE "${BUILD_DIR}")
-# endfunction()
-
-# # Вызываем функцию очистки при вызове cmake
-# clear_build_dir()
 
 include(pico_sdk_import.cmake)
 project(test C CXX ASM)
@@ -55,6 +44,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                 )
                 
 include_directories(inc)
+include_directories(lib/Bobla_encoder_lib/inc)
 
 
 

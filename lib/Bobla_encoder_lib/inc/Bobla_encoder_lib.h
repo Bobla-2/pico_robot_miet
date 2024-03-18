@@ -7,6 +7,7 @@ typedef struct {
     uint gpio;
     bool state;
     volatile int count;
+    volatile uint32_t time_old_stamp;
     
 } enkoder_t;
 

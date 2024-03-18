@@ -70,7 +70,7 @@ int main() {
 
         time_stamp = time_us_32(); 
         if  (time_stamp - time_old_stamp > 5000){ // 5000
-        gpio_put(24, true);
+            gpio_put(24, true);
             watchdog_update();
           
           
@@ -80,22 +80,9 @@ int main() {
             enkoder_core_no_irq();
 
              
-            // if (motor_robot_6612.status_dc == STOP_){
-            //     engle_temp = engle_temp * -1;
-            // }
-            // //motor_robot_forward_turn_enkoder(engle_temp, 50, 30, false);
-                
-
-
-            // if (motor_robot_6612.flag_stop > 60){
-            //    // stoooop();
-            // } else {
-            // }
-                move_line_core();
-            // printf("sdfsfs =%d//\r\n",motor_robot_6612.flag_stop);
-            // printf("
-
-
+            
+            move_line_core();
+           
 
             //////---------------------------------- user code  end ----------------------------------//////
 

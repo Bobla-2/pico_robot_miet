@@ -2,6 +2,7 @@
 #include "pico/stdlib.h"
 // #include "motor_robot.h"
 #include "Bobla_encoder_lib.h"
+
 // #include "Bobla_sensor_line_lib.h"
 #include "driver_motor_encoder.h"
 
@@ -34,7 +35,7 @@ void move_line_core(void) {
 
         switch (buf_state){
         case MOVE_LINE_3_STOP:
-        driver_motor_stop();
+            driver_motor_stop();
             // motor_robot_stop();
             break;
         case MOVE_LINE_3_FORWARD_LEFT:
@@ -62,6 +63,11 @@ void move_line_core(void) {
     }else{
         printf("ERROR count sensor line (move on line)");
     }
+}
+
+void move_brawls_core(bobla_brawls_sensor_t* sesnsor){
+
+
 }
 
 

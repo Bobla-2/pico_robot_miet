@@ -22,6 +22,7 @@ add_executable(${CMAKE_PROJECT_NAME} src/main.c)
 add_subdirectory(lib/Bobla_6612_motor_lib)
 add_subdirectory(lib/Bobla_encoder_lib)
 add_subdirectory(lib/Bobla_sensor_line_lib)
+add_subdirectory(lib/Bobla_brawls_sensor_lib)
 
 target_sources(${CMAKE_PROJECT_NAME} PUBLIC #${CMAKE_CURRENT_SOURCE_DIR}/src/sensor.c
                 # ${CMAKE_CURRENT_SOURCE_DIR}/src/motor_dc_pwm.c)
@@ -41,6 +42,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                 Bobla_encoder_lib
                 Bobla_sensor_line_lib
                 Bobla_6612_motor_lib
+                Bobla_brawls_sensor_lib
                 )
                 
 include_directories(inc)

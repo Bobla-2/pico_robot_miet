@@ -65,7 +65,20 @@ void move_line_core(void) {
     }
 }
 
-void move_brawls_core(bobla_brawls_sensor_t* sesnsor){
+void move_brawls_core(bobla_brawls_sensor_t* brawls_sensor){
+
+    if (brawls_sensor->state == 2 && brawls_sensor->stage_ == BRAWELS_DONE){
+        stoooop();
+        brawls_sensor->stage_ = BRAWELS_MOVE_LEFT;
+        driver_6612_motor_move(20, 20+20, DRIVER_MOTOR_BACK, DRIVER_MOTOR_FORVERD);
+
+    } else if (brawls_sensor->state == 4 && brawls_sensor->stage_ == BRAWELS_MOVE_LEFT){
+        driver_6612_motor_move(20, 20, DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_FORVERD);
+        brawls_sensor->stage_ = BRAWELS_MOVE_FORWORD;
+
+    } else if (brawls_sensor->state == 0 && brawls_sensor->stage_ == BRAWELS_MOVE_FORWORD){
+        brawls_sensor->stage_ = BRAWELS_MOVE_LEFT;
+    }
 
 
 }

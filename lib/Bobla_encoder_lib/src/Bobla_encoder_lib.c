@@ -31,13 +31,11 @@ void enkoder_init_NO_irq(enkoder_t* enkoder_L, enkoder_t* enkoder_R){
 }
 
 void set_rpm(int num_encoder){
-    uint32_t time_stamp;
-    time_stamp = time_us_32(); 
-
-    if  (time_stamp - enkoder_mas[num_encoder]->time_old_stamp > 200000){ 
-        
+    if  (time_us_32() - enkoder_mas[num_encoder]->time_old_stamp > 200000){ //5Hz
+        enkoder_mas[num_encoder]->rmp = enkoder_mas[num_encoder]->count - enkoder_mas[num_encoder]->old_count;
+        enkoder_mas[num_encoder]->old_count = enkoder_mas[num_encoder]->count;
+        enkoder_mas[num_encoder]->time_old_stamp = time_us_32();
     }
-
 }
 
 void enkoder_core_no_irq(){

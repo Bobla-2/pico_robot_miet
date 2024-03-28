@@ -45,5 +45,7 @@ void driver_motor_forward_left_turn(uint level, uint speed);
 /// @brief func for stop robot
 void driver_motor_stop();
 
+void stoooop();
+
 
 #endif

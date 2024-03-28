@@ -42,7 +42,7 @@ enkoder_t enkoder_R = {
     .gpio = 18,
 };
 
-uint braw_gpio_mas[] = {20,21,22};
+uint braw_gpio_mas[] = {21,22,23};
 bobla_brawls_sensor_t brawls_sensor = {
     .gpio = braw_gpio_mas,
     .len_gpio = 3,
@@ -79,7 +79,7 @@ int main() {
         static uint32_t time_old_stamp;
         static uint32_t time_old_stamp_2;
         static uint32_t time_old_stamp_3;
-        bool flag_brawls_mode = false;
+        static bool flag_brawls_mode = false;
 
         time_stamp = time_us_32(); 
         if  (time_stamp - time_old_stamp > 5000){  //200Hz
@@ -106,25 +106,21 @@ int main() {
         }
         if  (time_stamp - time_old_stamp_2 > 20000){  //50Hz
             brawls_sensor_read();
+            // printf("flag_brawls_mode == %d\r\n", brawls_sensor.state);
             if  (flag_brawls_mode == false){
                 move_line_core();
-                if (brawls_sensor.state != 0){
+                
+                if (brawls_sensor.state != 0){  
                     flag_brawls_mode = true;
                 }
             }else{
-                if (brawls_sensor.state == 2 && brawls_sensor.stage_ == BRAWELS_DONE){
-                    brawls_sensor.stage_ = BRAWELS_MOVE_LEFT;
-                } else if (brawls_sensor.state == 4 && brawls_sensor.stage_ == BRAWELS_MOVE_LEFT){
-                    brawls_sensor.stage_ = BRAWELS_MOVE_FORWORD;
-                } else if (brawls_sensor.state == 0 && brawls_sensor.stage_ == BRAWELS_MOVE_FORWORD){
-                    brawls_sensor.stage_ = BRAWELS_MOVE_LEFT;
-                }
                 move_brawls_core(&brawls_sensor);
             }
             time_old_stamp_2 = time_stamp;
         }
 
-        if  (time_stamp - time_old_stamp_3 > 500000){ //5Hz
+        if  (time_stamp - time_old_stamp_3 > 500000){ //2.5Hz
+            printf("rmpL = %d   ;rmpR = %d ", enkoder_L.rmp,enkoder_R.rmp);
             // printf("R:%d, L:%d||| LmK:%d, RmK:%d \r\n ", enkoder_R.count, enkoder_L.count, motor_robot_6612.k_L, motor_robot_6612.k_R);
             printf("sensor line =%d//%d//%d\r\n",sensor.state_a[0], sensor.state_a[1], sensor.state_a[2]);
             time_old_stamp_3 = time_stamp;

@@ -19,7 +19,8 @@ void brawls_sensor_read(){
     static bool temp = 0;
     for (uint i = 0; i < brawls_sensor_en->len_gpio; i++){
         temp = gpio_get(brawls_sensor_en->gpio[i]);
-        brawls_sensor_en->state |= temp << i;
+        if (i == 1) brawls_sensor_en->state |= !temp << i;
+        else brawls_sensor_en->state |= temp << i;
     }   
     if (brawls_sensor_en->state == 0){}
 }

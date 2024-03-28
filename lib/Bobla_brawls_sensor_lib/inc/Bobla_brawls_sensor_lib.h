@@ -3,11 +3,11 @@
 
 #include "pico/stdlib.h"
 typedef enum {
+    BRAWELS_DONE,
     BRAWELS_STOP,
     BRAWELS_MOVE_FORWORD,
     BRAWELS_MOVE_LEFT,
     BRAWELS_MOVE_RIGHT,
-    BRAWELS_DONE,
 }bobla_brawls_stage_t;
 
 typedef struct {

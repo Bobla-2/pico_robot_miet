@@ -8,7 +8,8 @@ typedef struct {
     bool state;
     volatile int count;
     volatile uint32_t time_old_stamp;
-    
+    int old_count;
+    uint rmp;
 } enkoder_t;
 
 /// @brief Encoder library initialization function using interrupts

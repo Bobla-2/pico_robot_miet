@@ -86,21 +86,10 @@ int main() {
             gpio_put(24, true);
             watchdog_update();
           
-          
-
-
             /////--------------------------------- user code begin ---------------------------------//////
             enkoder_core_no_irq();
 
-            
-            
-            
            
-
-            //////---------------------------------- user code  end ----------------------------------//////
-
-            
-            
             time_old_stamp = time_stamp;
             gpio_put(24, false);
         }
@@ -110,7 +99,7 @@ int main() {
             if  (flag_brawls_mode == false){
                 move_line_core();
                 
-                if (brawls_sensor.state != 0){  
+                if (brawls_sensor.state != 0){ 
                     flag_brawls_mode = true;
                 }
             }else{
@@ -119,12 +108,14 @@ int main() {
             time_old_stamp_2 = time_stamp;
         }
 
+
         if  (time_stamp - time_old_stamp_3 > 500000){ //2.5Hz
             printf("rmpL = %d   ;rmpR = %d ", enkoder_L.rmp,enkoder_R.rmp);
             // printf("R:%d, L:%d||| LmK:%d, RmK:%d \r\n ", enkoder_R.count, enkoder_L.count, motor_robot_6612.k_L, motor_robot_6612.k_R);
             printf("sensor line =%d//%d//%d\r\n",sensor.state_a[0], sensor.state_a[1], sensor.state_a[2]);
             time_old_stamp_3 = time_stamp;
-
         }
+
+        //////---------------------------------- user code  end ----------------------------------//////
     }
 }

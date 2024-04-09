@@ -3,7 +3,7 @@
 
 #include "pico/stdlib.h"
 #include "Bobla_sensor_line_lib.h"
-#include "Bobla_brawls_sensor_lib.h"
+#include "Bobla_digital_sensor_lib.h"
 // #include "motor_robot.h"
 
 enum move_line_t {
@@ -30,6 +30,6 @@ void move_line_core(void);
 /// @brief deinit systen move on line
 void move_line_deinit(void);
 
-void move_brawls_core(bobla_brawls_sensor_t* sesnsor);
+void move_digital_core(bobla_digital_sensor_t* sesnsor);
 
 #endif

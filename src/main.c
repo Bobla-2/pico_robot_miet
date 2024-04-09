@@ -8,7 +8,7 @@
 #include "move_on_line.h"
 #include "driver_motor_encoder.h"
 #include "Bobla_6612_motor_lib.h"
-#include "Bobla_brawls_sensor_lib.h"
+#include "Bobla_digital_sensor_lib.h"
 
 
 //-------------------init strukt for modul---------------------//
@@ -43,10 +43,11 @@ enkoder_t enkoder_R = {
 };
 
 uint braw_gpio_mas[] = {21,22,23};
-bobla_brawls_sensor_t brawls_sensor = {
+bobla_digital_sensor_t brawel_sensor = {
     .gpio = braw_gpio_mas,
-    .len_gpio = 3,
+    .len_gpio = 2,
     .state = 0,
+    .inversion = true,
 };
 
  //-------------------init---------------------///
@@ -62,7 +63,7 @@ void main_init(){
     enkoder_init_NO_irq(&enkoder_L, &enkoder_R);
     sensor_init(&sensor);
     move_line_init(&sensor);
-    brawls_sensor_init(&brawls_sensor);
+    digital_sensor_init(&brawel_sensor);
     gpio_init(24);
     gpio_set_dir(24, GPIO_OUT);
 }
@@ -71,46 +72,50 @@ void main_init(){
 
 int main() {
     main_init();
-    int engle_temp = 360;
+    
    
-    // gpio_put(PICO_DEFAULT_LED_PIN, false);
+    gpio_put(PICO_DEFAULT_LED_PIN, false);
     while (true) {
         static uint32_t time_stamp;
         static uint32_t time_old_stamp;
         static uint32_t time_old_stamp_2;
         static uint32_t time_old_stamp_3;
-        static bool flag_brawls_mode = false;
+        static bool flag_digital_mode = false;
 
         time_stamp = time_us_32(); 
         if  (time_stamp - time_old_stamp > 5000){  //200Hz
-            gpio_put(24, true);
+            
             watchdog_update();
           
             /////--------------------------------- user code begin ---------------------------------//////
             enkoder_core_no_irq();
-
-           
             time_old_stamp = time_stamp;
-            gpio_put(24, false);
+            
         }
         if  (time_stamp - time_old_stamp_2 > 20000){  //50Hz
-            brawls_sensor_read();
-            // printf("flag_brawls_mode == %d\r\n", brawls_sensor.state);
-            if  (flag_brawls_mode == false){
+            digital_sensor_read(&brawel_sensor);
+
+            // printf("flag_digital_mode == %d\r\n", brawel_sensor.state);
+            if  (flag_digital_mode == false){
                 move_line_core();
                 
-                if (brawls_sensor.state != 0){ 
-                    flag_brawls_mode = true;
+                if (brawel_sensor.state == 1){
+                    flag_digital_mode = true;
                 }
             }else{
-                move_brawls_core(&brawls_sensor);
+                move_digital_core(&brawel_sensor);
+                if (brawel_sensor.stage_ == DIGITAL_END){
+                    flag_digital_mode = false;
+                }
+                 
             }
             time_old_stamp_2 = time_stamp;
+            // driver_motor_forward(30);
         }
-
 
         if  (time_stamp - time_old_stamp_3 > 500000){ //2.5Hz
             printf("rmpL = %d   ;rmpR = %d ", enkoder_L.rmp,enkoder_R.rmp);
+            printf("brawel_sensor = %d  ", brawel_sensor.state);
             // printf("R:%d, L:%d||| LmK:%d, RmK:%d \r\n ", enkoder_R.count, enkoder_L.count, motor_robot_6612.k_L, motor_robot_6612.k_R);
             printf("sensor line =%d//%d//%d\r\n",sensor.state_a[0], sensor.state_a[1], sensor.state_a[2]);
             time_old_stamp_3 = time_stamp;

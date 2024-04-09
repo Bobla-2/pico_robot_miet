@@ -54,10 +54,10 @@ typedef struct {
 void driver_motor_6612_robot_init(motor_dc_pwm_6612_t* motor_robot);
 
 /// @brief func for move motors
-/// @param speed_R speed lift motor 
-/// @param speed_L speed lift motor
-/// @param DIR_R direction lift motor
-/// @param DIR_L direction lift motor
+/// @param speed_R speed right motor 
+/// @param speed_L speed left motor
+/// @param DIR_R direction right motor
+/// @param DIR_L direction left motor (FORVERD=1/BACK=0)
 void driver_6612_motor_move(uint speed_R, uint speed_L, int DIR_R, int DIR_L);
 
 #endif

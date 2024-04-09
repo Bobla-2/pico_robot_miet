@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.12)
 # Debug message
 message("Entering ${CMAKE_CURRENT_LIST_DIR}/CMakeLists.txt")
 
-set(NAME_LIB Bobla_brawls_sensor_lib)
+set(NAME_LIB Bobla_digital_sensor_lib)
 
-set(NAME_SOURCES_C Bobla_brawls_sensor_lib.c)
+set(NAME_SOURCES_C Bobla_digital_sensor_lib.c)
 
 # Register core library
 add_library(${NAME_LIB} INTERFACE)

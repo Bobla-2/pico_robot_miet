@@ -3,7 +3,7 @@
 // #include "motor_robot.h"
 #include "Bobla_encoder_lib.h"
 
-// #include "Bobla_sensor_line_lib.h"
+#include "Bobla_digital_sensor_lib.h"
 #include "driver_motor_encoder.h"
 
 sensor_t *en_sensor_line;
@@ -69,20 +69,45 @@ void move_digital_core(bobla_digital_sensor_t* digital_sensor){
 
     if (digital_sensor->state == 1 && digital_sensor->stage_ == DIGITAL_DONE){
         //stoooop();
-        digital_sensor->stage_ = DIGITAL_MOVE_LEFT;
+        digital_sensor->stage_ = 1;
         driver_6612_motor_move(25, 15, DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_BACK);
 
-    } else if (digital_sensor->state == 2 && digital_sensor->stage_ == DIGITAL_MOVE_LEFT){
-        driver_6612_motor_move(20, 30, DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_FORVERD);
-        digital_sensor->stage_ = DIGITAL_MOVE_FORWORD;
+    } else if (digital_sensor->state == 2 && digital_sensor->stage_ == 1){
+        driver_6612_motor_move(15, 30, DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_FORVERD);
+        digital_sensor->stage_ = 2;
 
-    } else if (digital_sensor->state == 0 && digital_sensor->stage_ == DIGITAL_MOVE_FORWORD){
+    } else if (digital_sensor->stage_ == 2){
         digital_sensor->stage_ = DIGITAL_END;
-        printf("hui");
     }
-
-
 }
 
+void move_safe_for_drop_table(bobla_digital_sensor_t* drop_sensor){
+    if (drop_sensor->state != 0){
+        driver_motor_len_move_to_line(-20);
+        driver_6612_motor_move(20, 20, DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_BACK);
+        sleep_ms(500);
+    }
+}
+
+void move_into_cyrcol(){
+    uint buf_state = 0;
+    
+    if (en_sensor_line->len == 3){
+        uint temp;
+        for (uint i = 0; i < en_sensor_line->len; i++){
+            temp = (en_sensor_line->state_a[i] > sens_level) ? 0 : 1;
+            buf_state |= (temp << i);
+            // printf("line55 =%d/\r\n",buf_state);
+        }
 
 
+        if (buf_state != 0){
+            driver_motor_forward_left_turn(100, 25);
+        } else {
+            driver_motor_forward(25);
+            sleep_ms(300);
+        }
+        
+    
+    }
+}

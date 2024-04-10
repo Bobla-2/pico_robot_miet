@@ -50,6 +50,14 @@ bobla_digital_sensor_t brawel_sensor = {
     .inversion = true,
 };
 
+uint drop_gpio_mas[] = {21,22,23};
+bobla_digital_sensor_t drop_sensor = {
+    .gpio = braw_gpio_mas,
+    .len_gpio = 3,
+    .state = 0,
+    .inversion = true,
+};
+
  //-------------------init---------------------///
 
 void main_init(){
@@ -94,10 +102,12 @@ int main() {
         }
         if  (time_stamp - time_old_stamp_2 > 20000){  //50Hz
             digital_sensor_read(&brawel_sensor);
+            // move_safe_for_drop_table(&drop_sensor);
 
             // printf("flag_digital_mode == %d\r\n", brawel_sensor.state);
             if  (flag_digital_mode == false){
-                move_line_core();
+                move_into_cyrcol();
+                //move_line_core();
                 
                 if (brawel_sensor.state == 1){
                     flag_digital_mode = true;

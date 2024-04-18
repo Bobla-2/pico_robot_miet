@@ -5,6 +5,7 @@
 
 #include "Bobla_digital_sensor_lib.h"
 #include "driver_motor_encoder.h"
+#include <stdint.h>
 
 sensor_t *en_sensor_line;
 bool invers_senser;
@@ -91,23 +92,97 @@ void move_safe_for_drop_table(bobla_digital_sensor_t* drop_sensor){
 
 void move_into_cyrcol(){
     uint buf_state = 0;
-    
+    static uint timer123 = 0;
+    static uint timeflag = 0;
     if (en_sensor_line->len == 3){
         uint temp;
         for (uint i = 0; i < en_sensor_line->len; i++){
-            temp = (en_sensor_line->state_a[i] > sens_level) ? 0 : 1;
+            temp = (en_sensor_line->state_a[i] > 1000) ? 0 : 1;
             buf_state |= (temp << i);
-            // printf("line55 =%d/\r\n",buf_state);
         }
 
+        printf("line55 =%d/\r\n",buf_state);
+        if (timeflag == 0){
+            if (buf_state != 0){
+                driver_motor_forward_left_turn(100, 25);
+                timeflag = 1;
+            } else {
+                driver_motor_forward(35);
+                
+            }
 
-        if (buf_state != 0){
-            driver_motor_forward_left_turn(100, 25);
         } else {
-            driver_motor_forward(25);
-            sleep_ms(300);
+            timer123 += 1;
+            if (timer123 == 10){
+                timer123 = 0;
+                timeflag = 0;
+            }
         }
         
     
     }
+}
+
+void move_to_bunk_core(bobla_digital_sensor_t* digital_sensor){
+    static uint timehui = 0;
+    if (digital_sensor->state == 2 && digital_sensor->stage_ == 0){
+        driver_6612_motor_move(25, 25, DRIVER_MOTOR_BACK, DRIVER_MOTOR_FORVERD);
+        digital_sensor->stage_ = 1;
+
+    } else if (digital_sensor->state == 1 && digital_sensor->stage_ == 1){
+        driver_motor_forward(20);
+        digital_sensor->stage_ = DIGITAL_END;
+    }
+    if (digital_sensor->stage_ == 1){
+        timehui += 1;
+        if (timehui == 120){
+            timehui == 0;
+            driver_motor_forward(20);
+            digital_sensor->stage_ = DIGITAL_END;
+        }
+    }
+}
+
+int countOnes(int num) {
+    int count = 0;
+    while (num != 0) {
+        count += num & 1;
+        num >>= 1;
+    }
+    return count;
+}
+
+int move_on_line_v2(bobla_digital_sensor_t* sensor_line){
+    if(sensor_line->len_gpio == 5){
+        if (countOnes(sensor_line->state) == 1){
+            uint buf_state = 0;
+            
+            uint temp;
+            for (uint i = 0; i < en_sensor_line->len; i++){
+                temp = (en_sensor_line->state_a[i] > sens_level) ? 1 : 0;
+                buf_state |= (temp << i);
+                // printf("line55 =%d/\r\n",buf_state);
+            }
+
+            switch (buf_state){
+                case 2:
+                    driver_motor_forward_left(50,20);
+                    break;
+                case 4:
+                    driver_motor_forward(20);
+                    break;
+                case 8:
+                    driver_motor_forward_right(50,20);
+                    break;
+                
+                default:
+                    break;
+            }
+        }
+
+    } else {
+        return -1;
+    }
+
+
 }

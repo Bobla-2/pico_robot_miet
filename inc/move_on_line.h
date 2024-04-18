@@ -33,5 +33,6 @@ void move_line_deinit(void);
 void move_digital_core(bobla_digital_sensor_t* sesnsor);
 
 void move_into_cyrcol();
+void move_to_bunk_core(bobla_digital_sensor_t* digital_sensor);
 
 #endif

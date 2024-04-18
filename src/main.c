@@ -9,7 +9,7 @@
 #include "driver_motor_encoder.h"
 #include "Bobla_6612_motor_lib.h"
 #include "Bobla_digital_sensor_lib.h"
-
+#include <stdio.h>
 
 //-------------------init strukt for modul---------------------//
 
@@ -65,7 +65,7 @@ void main_init(){
     gpio_init(PICO_DEFAULT_LED_PIN);
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
     if (watchdog_caused_reboot()) printf("Rebooted by Watchdog!\n");
-    watchdog_enable(100, 1);
+    //watchdog_enable(100, 1);
     // motor_robot_init(&motor_robot_6612, &enkoder_R, &enkoder_L);
     driver_motor_init(&motor_robot_6612, &enkoder_R, &enkoder_L);
     enkoder_init_NO_irq(&enkoder_L, &enkoder_R);
@@ -93,7 +93,7 @@ int main() {
         time_stamp = time_us_32(); 
         if  (time_stamp - time_old_stamp > 5000){  //200Hz
             
-            watchdog_update();
+           // watchdog_update();
           
             /////--------------------------------- user code begin ---------------------------------//////
             enkoder_core_no_irq();
@@ -102,25 +102,45 @@ int main() {
         }
         if  (time_stamp - time_old_stamp_2 > 20000){  //50Hz
             digital_sensor_read(&brawel_sensor);
+            
             // move_safe_for_drop_table(&drop_sensor);
 
             // printf("flag_digital_mode == %d\r\n", brawel_sensor.state);
-            if  (flag_digital_mode == false){
-                move_into_cyrcol();
-                //move_line_core();
+                        printf("brawel_sensor = %d   ",brawel_sensor.state );
+                if  (flag_digital_mode == false){
+                    move_into_cyrcol();
+                    printf("move_into_cyrcol");
+                    
+                    if (brawel_sensor.state == 2){
+                        brawel_sensor.stage_ = DIGITAL_DONE;
+                        flag_digital_mode = true;
+                    }
+                }else{
+                        printf("move_to_bunk_core");
+                    move_to_bunk_core(&brawel_sensor);
+                    if (brawel_sensor.stage_ == DIGITAL_END){
+                        flag_digital_mode = false;
+                        
+                    }  
+                }
+              
+            ////--------------------------------------------------
+            
+            // if  (flag_digital_mode == false){
+            //     move_into_cyrcol();
+            //     //move_line_core();
                 
-                if (brawel_sensor.state == 1){
-                    flag_digital_mode = true;
-                }
-            }else{
-                move_digital_core(&brawel_sensor);
-                if (brawel_sensor.stage_ == DIGITAL_END){
-                    flag_digital_mode = false;
-                }
-                 
-            }
+            //     if (brawel_sensor.state == 1){
+            //         flag_digital_mode = true;
+            //     }
+            // }else{
+            //     move_digital_core(&brawel_sensor);
+            //     if (brawel_sensor.stage_ == DIGITAL_END){
+            //         flag_digital_mode = false;
+            //     }  
+            // }
+            ///----------------------------------------------------
             time_old_stamp_2 = time_stamp;
-            // driver_motor_forward(30);
         }
 
         if  (time_stamp - time_old_stamp_3 > 500000){ //2.5Hz
@@ -133,4 +153,4 @@ int main() {
 
         //////---------------------------------- user code  end ----------------------------------//////
     }
-}
+} 

@@ -3,6 +3,7 @@
 #include "hardware/irq.h"
 #include "hardware/pwm.h"
 #include "Bobla_encoder_lib.h"
+#include <stdlib.h>
 
 motor_dc_pwm_6612_t* en_dr_motor;
 enkoder_t* en_dr_encoder_r;
@@ -71,10 +72,12 @@ void stoooop(){
 }
 
 
-void driver_motor_len_move_to_line(int len){
-    int begin_count = (en_dr_encoder_l->count + en_dr_encoder_r->count) / 2;
-    while (abs(len) <= ((en_dr_encoder_l->count + en_dr_encoder_r->count) / 2) - begin_count){
+int driver_motor_len_move_to_line(int len){
+    static int begin_count = 0;
+    if (begin_count == 0) begin_count = (en_dr_encoder_l->count + en_dr_encoder_r->count) / 2;
+    if (abs(len) <= ((en_dr_encoder_l->count + en_dr_encoder_r->count) / 2) - begin_count){
         if (len < 0) driver_motor_back(20);
         else driver_motor_forward(20);
-    }
+        return 0;
+    } else return 1;
 }

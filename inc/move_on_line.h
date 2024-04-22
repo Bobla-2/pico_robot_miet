@@ -16,6 +16,16 @@ enum move_line_t {
     MOVE_LINE_3_STOP = 7,
 };
 
+typedef enum {
+    MOVE_LINE_FORWARD,
+    MOVE_LINE_RIDHT,
+    MOVE_LINE_LEFT,
+    MOVE_LINE_RIDHT_LEFT,
+    MOVE_LINE_LEFT_FORWARD,
+    MOVE_LINE_RIDHT_FORWARD,
+    MOVE_LINE_RIDHT_LEFT_FORWARD,
+} move_line_type_line_t;
+
 
 
 

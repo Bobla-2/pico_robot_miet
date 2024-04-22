@@ -5,6 +5,7 @@
 
 #include "Bobla_digital_sensor_lib.h"
 #include "driver_motor_encoder.h"
+#include "pico/types.h"
 #include <stdint.h>
 
 sensor_t *en_sensor_line;
@@ -151,38 +152,83 @@ int countOnes(int num) {
     }
     return count;
 }
+int move_on_line_read_turn(bobla_digital_sensor_t* sensor_line){
+    static uint stage_read_trase = 0;
+    static move_line_type_line_t temp_type_line = 0;
+    switch (stage_read_trase){
+        case 0:
+            if (driver_motor_len_move_to_line(30) == 1) stage_read_trase = 1;
+
+            if (sensor_line->state == 31 && temp_type_line != MOVE_LINE_RIDHT_LEFT_FORWARD){
+                temp_type_line = MOVE_LINE_RIDHT_LEFT;
+            } 
+
+            if (temp_type_line == 0) {
+                if (sensor_line->state == 28 && sensor_line->state == 24) {
+                    temp_type_line = MOVE_LINE_LEFT;
+                } else if (sensor_line->state == 3 && sensor_line->state == 7){
+                    temp_type_line = MOVE_LINE_RIDHT;
+                }
+            }
+ 
+            break;
+        case 1:
+            if(sensor_line->state == 4){
+                if(temp_type_line == MOVE_LINE_RIDHT_LEFT) temp_type_line = MOVE_LINE_RIDHT_LEFT_FORWARD;
+                if(temp_type_line == MOVE_LINE_LEFT) temp_type_line = MOVE_LINE_LEFT_FORWARD;
+                if(temp_type_line == MOVE_LINE_RIDHT) temp_type_line = MOVE_LINE_RIDHT_FORWARD;
+            }
+            stage_read_trase = 2;
+            
+            break;
+        case 2:
+            return temp_type_line;
+            
+            break;
+        
+        default:
+            break;
+    
+
+    }
+    return 0;
+} 
+
 
 int move_on_line_v2(bobla_digital_sensor_t* sensor_line){
-    if(sensor_line->len_gpio == 5){
-        if (countOnes(sensor_line->state) == 1){
-            uint buf_state = 0;
-            
-            uint temp;
-            for (uint i = 0; i < en_sensor_line->len; i++){
-                temp = (en_sensor_line->state_a[i] > sens_level) ? 1 : 0;
-                buf_state |= (temp << i);
-                // printf("line55 =%d/\r\n",buf_state);
-            }
+    static uint flag_mod_move = 0;
+    
+        //if (countOnes(sensor_line->state) <= 2){
+        if (flag_mod_move == 0){  
 
-            switch (buf_state){
+            switch (sensor_line->state){
                 case 2:
                     driver_motor_forward_left(50,20);
                     break;
+                case 6:
+                    driver_motor_forward_left(30,20);
+                    break;
                 case 4:
                     driver_motor_forward(20);
+                    break;
+                case 12:
+                    driver_motor_forward_right(30,20);
                     break;
                 case 8:
                     driver_motor_forward_right(50,20);
                     break;
                 
                 default:
+                    flag_mod_move = 1;
                     break;
             }
-        }
+        } else {
+            if (move_on_line_read_turn(sensor_line) != 0){
+                //написать функцию маршрута
+                //пворот куды нам надо
+            }
+        } 
 
-    } else {
-        return -1;
-    }
 
-
+    return 0;
 }

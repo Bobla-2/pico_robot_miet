@@ -3,12 +3,11 @@
 #include "hardware/gpio.h"
 #include "hardware/irq.h"
 
-bobla_digital_sensor_t* digital_sensor_en;
+
 
 
 void digital_sensor_init(bobla_digital_sensor_t* digital_sensor){
 
-    //digital_sensor_en = digital_sensor;
     for (uint i = 0; i < digital_sensor->len_gpio; i++){
         gpio_init(digital_sensor->gpio[i]);
         gpio_set_dir(digital_sensor->gpio[i], GPIO_IN);

@@ -75,9 +75,14 @@ void stoooop(){
 int driver_motor_len_move_to_line(int len){
     static int begin_count = 0;
     if (begin_count == 0) begin_count = (en_dr_encoder_l->count + en_dr_encoder_r->count) / 2;
-    if (abs(len) <= ((en_dr_encoder_l->count + en_dr_encoder_r->count) / 2) - begin_count){
+    printf("begin_count = %d,_l->count=%d_r->count=%d\n", begin_count, en_dr_encoder_l->count, en_dr_encoder_r->count);
+    printf("fdfdfdfd=%d = %d\n",len, ((en_dr_encoder_l->count + en_dr_encoder_r->count) / 2) - begin_count);
+    if (abs(len) > ((en_dr_encoder_l->count + en_dr_encoder_r->count) / 2) - begin_count){
         if (len < 0) driver_motor_back(20);
         else driver_motor_forward(20);
         return 0;
-    } else return 1;
+    } else {
+        begin_count = 0;
+        return 1;
+    }
 }

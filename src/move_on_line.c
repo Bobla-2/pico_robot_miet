@@ -137,7 +137,7 @@ void move_to_bunk_core(bobla_digital_sensor_t* digital_sensor){
     if (digital_sensor->stage_ == 1){
         timehui += 1;
         if (timehui == 120){
-            timehui == 0;
+            timehui = 0;
             driver_motor_forward(20);
             digital_sensor->stage_ = DIGITAL_END;
         }
@@ -157,31 +157,36 @@ int move_on_line_read_turn(bobla_digital_sensor_t* sensor_line){
     static move_line_type_line_t temp_type_line = 0;
     switch (stage_read_trase){
         case 0:
-            if (driver_motor_len_move_to_line(30) == 1) stage_read_trase = 1;
+        printf("temp_type_line22 = %d;;;sens=%d\n", temp_type_line, sensor_line->state);
+            if (driver_motor_len_move_to_line(15) == 1) stage_read_trase = 1;
 
             if (sensor_line->state == 31 && temp_type_line != MOVE_LINE_RIDHT_LEFT_FORWARD){
                 temp_type_line = MOVE_LINE_RIDHT_LEFT;
             } 
 
             if (temp_type_line == 0) {
-                if (sensor_line->state == 28 && sensor_line->state == 24) {
+                if (sensor_line->state == 28 || sensor_line->state == 24) {
                     temp_type_line = MOVE_LINE_LEFT;
-                } else if (sensor_line->state == 3 && sensor_line->state == 7){
+                } else if (sensor_line->state == 3 || sensor_line->state == 7){
                     temp_type_line = MOVE_LINE_RIDHT;
                 }
             }
- 
+            printf("temp_type_line33 = %d\n", temp_type_line);
             break;
         case 1:
+        
+            
             if(sensor_line->state == 4){
                 if(temp_type_line == MOVE_LINE_RIDHT_LEFT) temp_type_line = MOVE_LINE_RIDHT_LEFT_FORWARD;
                 if(temp_type_line == MOVE_LINE_LEFT) temp_type_line = MOVE_LINE_LEFT_FORWARD;
                 if(temp_type_line == MOVE_LINE_RIDHT) temp_type_line = MOVE_LINE_RIDHT_FORWARD;
             }
+            printf("temp_type444 = %d\n", temp_type_line);
             stage_read_trase = 2;
-            
             break;
         case 2:
+            
+            printf("temp_type98776_line = %d\n", temp_type_line);
             return temp_type_line;
             
             break;
@@ -194,13 +199,17 @@ int move_on_line_read_turn(bobla_digital_sensor_t* sensor_line){
     return 0;
 } 
 
+int move_on_line_choice_turn(int type_line){
+    uint16_t tepm_random = en_sensor_line->state_a[1];
+    uint tepm_random__ = (tepm_random << (32 - type_line));
+    return countOnes(tepm_random__);
+}
 
 int move_on_line_v2(bobla_digital_sensor_t* sensor_line){
     static uint flag_mod_move = 0;
-    
+        printf("line = %d\n", sensor_line->state);
         //if (countOnes(sensor_line->state) <= 2){
         if (flag_mod_move == 0){  
-
             switch (sensor_line->state){
                 case 2:
                     driver_motor_forward_left(50,20);
@@ -223,9 +232,41 @@ int move_on_line_v2(bobla_digital_sensor_t* sensor_line){
                     break;
             }
         } else {
-            if (move_on_line_read_turn(sensor_line) != 0){
-                //написать функцию маршрута
-                //пворот куды нам надо
+            int static temp_type_line = 0; 
+            uint static state_turn_ = 0;
+            uint static turn__ = 0;
+            
+            switch (state_turn_) {
+                case 0:
+                    temp_type_line = move_on_line_read_turn(sensor_line);
+                    printf("temp_type_line = %d\n", temp_type_line);
+                    if (temp_type_line != 0) state_turn_ = 1;
+                    if (temp_type_line == MOVE_LINE_RIDHT){
+                        state_turn_ = 2;
+                    }
+                    if (temp_type_line == MOVE_LINE_LEFT){
+                        state_turn_ = 2;  
+                    }
+                    break;        
+                
+                
+                case 1:
+                // тут я остановился
+                // надо проверить move_on_line_choice_turn
+                // функции написать поворот 
+                    printf("temp_type_case 1 = %d\n", temp_type_line);
+                    turn__ = move_on_line_choice_turn(temp_type_line);
+                    state_turn_ = 2;    
+                    printf("turn__ 1 = %d\n", turn__);
+                    break; 
+                case 2:
+                    switch (turn__) {
+                        case 0:
+                            break;
+
+                    
+                    }
+                    
             }
         } 
 

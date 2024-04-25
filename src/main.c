@@ -9,6 +9,7 @@
 #include "driver_motor_encoder.h"
 #include "Bobla_6612_motor_lib.h"
 #include "Bobla_digital_sensor_lib.h"
+#include <stdbool.h>
 #include <stdio.h>
 
 //-------------------init strukt for modul---------------------//
@@ -49,7 +50,13 @@ bobla_digital_sensor_t brawel_sensor = {
     .state = 0,
     .inversion = true,
 };
-
+uint line_gpio_mas[] = {13,14,15,16,17};
+bobla_digital_sensor_t line_d_sensor = {
+    .gpio = line_gpio_mas,
+    .len_gpio = 5,
+    .state = 0,
+    .inversion = true,
+};
 uint drop_gpio_mas[] = {21,22,23};
 bobla_digital_sensor_t drop_sensor = {
     .gpio = braw_gpio_mas,
@@ -72,6 +79,7 @@ void main_init(){
     sensor_init(&sensor);
     move_line_init(&sensor);
     digital_sensor_init(&brawel_sensor);
+    digital_sensor_init(&line_d_sensor);
     gpio_init(24);
     gpio_set_dir(24, GPIO_OUT);
 }
@@ -102,19 +110,21 @@ int main() {
         }
         if  (time_stamp - time_old_stamp_2 > 20000){  //50Hz
             digital_sensor_read(&brawel_sensor);
+            digital_sensor_read(&line_d_sensor);
             
             // move_safe_for_drop_table(&drop_sensor);
 
             // printf("flag_digital_mode == %d\r\n", brawel_sensor.state);
-                        printf("brawel_sensor = %d   ",brawel_sensor.state );
+                        // printf("brawel_sensor = %d   ",brawel_sensor.state );
                 if  (flag_digital_mode == false){
-                    move_into_cyrcol();
-                    printf("move_into_cyrcol");
+                    move_on_line_v2(&line_d_sensor);
+                    // move_into_cyrcol();
+                    // printf("move_into_cyrcol");
                     
-                    if (brawel_sensor.state == 2){
-                        brawel_sensor.stage_ = DIGITAL_DONE;
-                        flag_digital_mode = true;
-                    }
+                    // if (brawel_sensor.state == 2){
+                    //     brawel_sensor.stage_ = DIGITAL_DONE;
+                    //     flag_digital_mode = true;
+                    // }
                 }else{
                         printf("move_to_bunk_core");
                     move_to_bunk_core(&brawel_sensor);

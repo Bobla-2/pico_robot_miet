@@ -162,11 +162,11 @@ void driver_motor_6612_robot_init(motor_dc_pwm_6612_t* motor_robot){
     pwm_set_wrap(slice_num, 10000);
     pwm_clear_irq(slice_num);
     motor_dr_slise_rec = slice_num;
-    if (bob_en_dr_motor->flag_enable_irq == true){
-        pwm_set_irq_enabled(slice_num, true);
-        irq_set_exclusive_handler(PWM_IRQ_WRAP, on_pwm_driver);
-        irq_set_enabled(PWM_IRQ_WRAP, true);
-}
+//     if (bob_en_dr_motor->flag_enable_irq == true){
+//         pwm_set_irq_enabled(slice_num, true);
+//         irq_set_exclusive_handler(PWM_IRQ_WRAP, on_pwm_driver);
+//         irq_set_enabled(PWM_IRQ_WRAP, true);
+// }
     }
     
 

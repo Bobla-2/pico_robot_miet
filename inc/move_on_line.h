@@ -4,6 +4,7 @@
 #include "pico/stdlib.h"
 #include "Bobla_sensor_line_lib.h"
 #include "Bobla_digital_sensor_lib.h"
+#include "Bobla_6lib_sensor_lib.h"
 // #include "motor_robot.h"
 
 enum move_line_t {
@@ -46,5 +47,6 @@ void move_digital_core(bobla_digital_sensor_t* sesnsor);
 void move_into_cyrcol();
 void move_to_bunk_core(bobla_digital_sensor_t* digital_sensor);
 int move_on_line_v2(bobla_digital_sensor_t* sensor_line);
+void move_to_l6_core(bobla_6lib_sensor_t* sensor);
 
 #endif

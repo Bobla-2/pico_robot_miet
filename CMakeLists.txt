@@ -19,6 +19,7 @@ add_subdirectory(lib/Bobla_6612_motor_lib)
 add_subdirectory(lib/Bobla_encoder_lib)
 add_subdirectory(lib/Bobla_sensor_line_lib)
 add_subdirectory(lib/Bobla_digital_sensor_lib)
+add_subdirectory(lib/Bobla_6lib_sensor_lib)
 
 target_sources(${CMAKE_PROJECT_NAME} PUBLIC
                 ${CMAKE_CURRENT_SOURCE_DIR}/src/driver_motor_encoder.c
@@ -34,6 +35,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
                 Bobla_sensor_line_lib
                 Bobla_6612_motor_lib
                 Bobla_digital_sensor_lib
+                Bobla_6lib_sensor_lib
                 )
                 
 include_directories(inc)

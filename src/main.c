@@ -9,6 +9,7 @@
 #include "driver_motor_encoder.h"
 #include "Bobla_6612_motor_lib.h"
 #include "Bobla_digital_sensor_lib.h"
+#include "Bobla_6lib_sensor_lib.h"
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -64,6 +65,11 @@ bobla_digital_sensor_t drop_sensor = {
     .state = 0,
     .inversion = true,
 };
+bobla_6lib_sensor_t l6_sens = {
+    .gpio_echo = 23,
+    .gpio_trig = 24,
+
+};
 
  //-------------------init---------------------///
 
@@ -82,6 +88,7 @@ void main_init(){
     digital_sensor_init(&line_d_sensor);
     gpio_init(24);
     gpio_set_dir(24, GPIO_OUT);
+    l6_sensor_init(&l6_sens);
 }
 
  //-------------------main cycle---------------------//
@@ -100,39 +107,52 @@ int main() {
 
         time_stamp = time_us_32(); 
         if  (time_stamp - time_old_stamp > 5000){  //200Hz
+
             
            // watchdog_update();
           
             /////--------------------------------- user code begin ---------------------------------//////
             enkoder_core_no_irq();
+            l6_sensor_read();
             time_old_stamp = time_stamp;
             
         }
         if  (time_stamp - time_old_stamp_2 > 20000){  //50Hz
             digital_sensor_read(&brawel_sensor);
             digital_sensor_read(&line_d_sensor);
+
             
             // move_safe_for_drop_table(&drop_sensor);
 
             // printf("flag_digital_mode == %d\r\n", brawel_sensor.state);
                         // printf("brawel_sensor = %d   ",brawel_sensor.state );
-                if  (flag_digital_mode == false){
-                    move_on_line_v2(&line_d_sensor);
-                    // move_into_cyrcol();
-                    // printf("move_into_cyrcol");
+
+            printf("huii = %d,rise = %d\n", l6_sens.len, l6_sens.time_stamp);
+            move_to_l6_core(&l6_sens);
+
+
+
+
+
+                        ///---------------------
+                // if  (flag_digital_mode == false){
+                //     move_on_line_v2(&line_d_sensor);
+                //     // move_into_cyrcol();
+                //     // printf("move_into_cyrcol");
                     
-                    // if (brawel_sensor.state == 2){
-                    //     brawel_sensor.stage_ = DIGITAL_DONE;
-                    //     flag_digital_mode = true;
-                    // }
-                }else{
-                        printf("move_to_bunk_core");
-                    move_to_bunk_core(&brawel_sensor);
-                    if (brawel_sensor.stage_ == DIGITAL_END){
-                        flag_digital_mode = false;
+                //     // if (brawel_sensor.state == 2){
+                //     //     brawel_sensor.stage_ = DIGITAL_DONE;
+                //     //     flag_digital_mode = true;
+                //     // }
+                // }else{
+                //         printf("move_to_bunk_core");
+                //     move_to_bunk_core(&brawel_sensor);
+                //     if (brawel_sensor.stage_ == DIGITAL_END){
+                //         flag_digital_mode = false;
                         
-                    }  
-                }
+                //     }  
+                // }
+                /////---------------------------------------
               
             ////--------------------------------------------------
             

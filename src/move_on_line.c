@@ -316,3 +316,35 @@ int move_on_line_v2(bobla_digital_sensor_t* sensor_line){
 
     return 0;
 }
+
+void move_to_l6_core(bobla_6lib_sensor_t* sensor){
+    // static uint timehui = 0;
+    static uint turn_e_ = 0;
+    
+    switch (turn_e_) {
+        case 0:
+            driver_motor_forward(20);
+            if (sensor->len < 20) turn_e_ = 1;
+            break;
+        case 1:
+            if (driver_motor_len_move_to_right(30) == 1) turn_e_ = 2;
+            break;
+        case 2:
+            driver_motor_forward(20);
+            if (sensor->len < 20) turn_e_ = 3;
+            break;
+        case 3:
+            if (driver_motor_len_move_to_left(30) == 1) turn_e_ = 0;
+
+            break;
+
+
+
+    }
+    
+        
+        
+
+    
+}
+

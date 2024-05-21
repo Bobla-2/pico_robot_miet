@@ -28,9 +28,7 @@ void driver_motor_back(uint speed){
 
 void driver_motor_forward(uint speed){
     en_dr_motor->flag_stop = 0;
-    // printf("driver_motor_forward\r\n");
     uint delta = (en_dr_encoder_r->rmp - en_dr_encoder_l->rmp) * 3;
-    
     driver_6612_motor_move(speed - delta, speed + delta, DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_FORVERD); 
 }
 
@@ -75,11 +73,37 @@ void stoooop(){
 int driver_motor_len_move_to_line(int len){
     static int begin_count = 0;
     if (begin_count == 0) begin_count = (en_dr_encoder_l->count + en_dr_encoder_r->count) / 2;
-    printf("begin_count = %d,_l->count=%d_r->count=%d\n", begin_count, en_dr_encoder_l->count, en_dr_encoder_r->count);
-    printf("fdfdfdfd=%d = %d\n",len, ((en_dr_encoder_l->count + en_dr_encoder_r->count) / 2) - begin_count);
     if (abs(len) > ((en_dr_encoder_l->count + en_dr_encoder_r->count) / 2) - begin_count){
         if (len < 0) driver_motor_back(20);
         else driver_motor_forward(20);
+        return 0;
+    } else {
+        begin_count = 0;
+        return 1;
+    }
+}
+int driver_motor_len_move_to_left(int len){
+    static int begin_count = 0;
+    if (begin_count == 0) begin_count = en_dr_encoder_r->count;
+    if (len > (en_dr_encoder_r->count - begin_count)){
+        // if (len > 0) 
+        driver_motor_forward_left(100,20);
+        printf("driver_motor1 = %d\n", en_dr_encoder_r->count - begin_count);
+        // else driver_motor_forward(20);
+        return 0;
+    } else {
+        begin_count = 0;
+        return 1;
+    }
+}
+int driver_motor_len_move_to_right(int len){
+    static int begin_count = 0;
+    if (begin_count == 0) begin_count = en_dr_encoder_l->count;
+    if (len > (en_dr_encoder_l->count - begin_count)){
+        // if (len > 0) 
+        driver_motor_forward_right(100,20);
+        printf("driver_motor1 = %d\n", en_dr_encoder_l->count - begin_count);
+        // else driver_motor_forward(20);
         return 0;
     } else {
         begin_count = 0;

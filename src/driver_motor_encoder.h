@@ -49,6 +49,8 @@ void driver_motor_stop();
 /// @param len u hui
 int driver_motor_len_move_to_line(int len);
 
+int driver_motor_len_move_to_left(int len);
+int driver_motor_len_move_to_right(int len);
 // void stoooop();
 
 

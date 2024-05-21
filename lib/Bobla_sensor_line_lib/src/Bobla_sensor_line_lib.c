@@ -15,8 +15,6 @@ irq_handler_t  on_adc_wrap(void) {
 
 void sensor_init(sensor_t* sensor_mas){
     sensor_en = sensor_mas;
-    
-    
     if (sensor_mas->mode == DIGITAL_sensor){ 
         for (uint i = 0; i < sensor_mas->len; i++){
             gpio_init(sensor_mas->gpio[i]);

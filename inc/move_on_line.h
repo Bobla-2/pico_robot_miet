@@ -17,6 +17,7 @@ enum move_line_t {
 };
 
 typedef enum {
+    MOVE_LINE_NONE,
     MOVE_LINE_FORWARD,
     MOVE_LINE_RIDHT,
     MOVE_LINE_LEFT,

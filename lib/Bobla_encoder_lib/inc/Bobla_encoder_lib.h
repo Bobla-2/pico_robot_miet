@@ -7,7 +7,10 @@ typedef struct {
     uint gpio;
     bool state;
     volatile int count;
-    
+    volatile uint32_t time_old_stamp;
+    int old_count;
+    uint rmp;
+    uint true_rmp;
 } enkoder_t;
 
 /// @brief Encoder library initialization function using interrupts

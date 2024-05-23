@@ -137,7 +137,7 @@ motor_dc_pwm_6612_t* bob_en_dr_motor;
 
 void on_pwm_driver() {
     pwm_clear_irq(motor_dr_slise_rec);
-    gpio_put(PICO_DEFAULT_LED_PIN, true);
+    // gpio_put(PICO_DEFAULT_LED_PIN, true);
 }
 
 //------------------------low-level-fun---------------------//
@@ -162,15 +162,17 @@ void driver_motor_6612_robot_init(motor_dc_pwm_6612_t* motor_robot){
     pwm_set_wrap(slice_num, 10000);
     pwm_clear_irq(slice_num);
     motor_dr_slise_rec = slice_num;
-    // pwm_set_irq_enabled(slice_num, true);
-    // irq_set_exclusive_handler(PWM_IRQ_WRAP, on_pwm_driver);
-    // irq_set_enabled(PWM_IRQ_WRAP, true);
-}
+//     if (bob_en_dr_motor->flag_enable_irq == true){
+//         pwm_set_irq_enabled(slice_num, true);
+//         irq_set_exclusive_handler(PWM_IRQ_WRAP, on_pwm_driver);
+//         irq_set_enabled(PWM_IRQ_WRAP, true);
+// }
+    }
+    
 
 
 
 void driver_6612_motor_move(uint speed_R, uint speed_L, int DIR_R, int DIR_L){
-    // printf("driver_6612_motor_move");
     gpio_put(bob_en_dr_motor->gpio_Lin1, !(bool)DIR_L);
     gpio_put(bob_en_dr_motor->gpio_Lin2, (bool)DIR_L);
     

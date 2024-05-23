@@ -46,20 +46,18 @@ typedef struct {
     motor_direct_6612_t direct;
     motor_robot_status_t status_dc; 
     uint32_t flag_stop;
+    bool flag_enable_irq;
 }motor_dc_pwm_6612_t;
 
-// /// @brief func for init driver motor
-// /// @param motor_robot 
-// void motor_6612_robot_init(motor_dc_pwm_6612_t* motor_robot);
-
-// /// @brief func for move robot forvard
-// /// @param motor_robot struct 6612 driver
-// /// @param speed 
-// void motor_6612_robot_forward(motor_dc_pwm_6612_t* motor_robot, uint16_t speed);
-
-
-
+/// @brief func for 
+/// @param motor_robot srtuct motor 
 void driver_motor_6612_robot_init(motor_dc_pwm_6612_t* motor_robot);
+
+/// @brief func for move motors
+/// @param speed_R speed right motor 
+/// @param speed_L speed left motor
+/// @param DIR_R direction right motor
+/// @param DIR_L direction left motor (FORVERD=1/BACK=0)
 void driver_6612_motor_move(uint speed_R, uint speed_L, int DIR_R, int DIR_L);
 
 #endif

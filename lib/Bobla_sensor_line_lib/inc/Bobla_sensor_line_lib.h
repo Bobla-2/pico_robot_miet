@@ -7,6 +7,7 @@ typedef enum {
     DIGITAL_sensor,
     ANALOG_sensor,
 } sensor_mode_t;
+
 typedef struct {
     uint* gpio;
     uint16_t len;
@@ -16,8 +17,11 @@ typedef struct {
 } sensor_t;
 
 
-
+/// @brief init sensor line
+/// @param sensor_mas struct for sensor line: must have sensor_mode_t
 void sensor_init(sensor_t* sensor_mas);
+
+/// @brief func for read sensor line in digital mode. Must be called frequently
 void sensor_read_digital();
 
 #endif

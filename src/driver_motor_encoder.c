@@ -59,10 +59,10 @@ void driver_motor_forward_right_turn(uint level, uint speed){
 void stoooop();
 
 void driver_motor_stop(){
-    en_dr_motor->flag_stop += 1;
-    if (en_dr_motor->flag_stop == 15){
+    // en_dr_motor->flag_stop += 1;
+    // if (en_dr_motor->flag_stop == 15){
         stoooop();
-    }
+    // }
     // driver_6612_motor_move(0,0 , DRIVER_MOTOR_FORVERD, DRIVER_MOTOR_FORVERD);
 }
 void stoooop(){

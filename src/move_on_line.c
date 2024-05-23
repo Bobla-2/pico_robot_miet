@@ -337,14 +337,12 @@ void move_to_l6_core(bobla_6lib_sensor_t* sensor){
             if (driver_motor_len_move_to_left(30) == 1) turn_e_ = 0;
 
             break;
-
-
-
-    }
-    
-        
-        
-
-    
+    } 
+}
+void move_to_hui(uint8_t seor){
+    // static uint timehui = 0;
+    if (seor == 53) driver_motor_forward(20);
+    if (seor == 52) driver_motor_stop();
+     
 }
 

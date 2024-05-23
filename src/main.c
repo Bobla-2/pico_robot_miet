@@ -10,10 +10,17 @@
 #include "Bobla_6612_motor_lib.h"
 #include "Bobla_digital_sensor_lib.h"
 #include "Bobla_6lib_sensor_lib.h"
+#include "lib_bl.h"
 #include <stdbool.h>
 #include <stdio.h>
 
 //-------------------init strukt for modul---------------------//
+
+
+uasrrrr_t usaaa = {
+    
+
+};
 
 uint temp_gpio[] = {26,27,28};
 uint16_t temp_data_analog[3];
@@ -89,6 +96,7 @@ void main_init(){
     gpio_init(24);
     gpio_set_dir(24, GPIO_OUT);
     l6_sensor_init(&l6_sens);
+    init_uasrrrr(&usaaa);
 }
 
  //-------------------main cycle---------------------//
@@ -127,8 +135,10 @@ int main() {
             // printf("flag_digital_mode == %d\r\n", brawel_sensor.state);
                         // printf("brawel_sensor = %d   ",brawel_sensor.state );
 
-            printf("huii = %d,rise = %d\n", l6_sens.len, l6_sens.time_stamp);
-            move_to_l6_core(&l6_sens);
+            // printf("huii = %d,rise = %d\n", l6_sens.len, l6_sens.time_stamp);
+            // move_to_l6_core(&l6_sens);
+            move_to_hui(usaaa.resive);
+            printf("huii = %d\n", usaaa.resive);
 
 
 
